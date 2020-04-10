@@ -8,7 +8,6 @@ header-img: "img/post-bg-2015.jpg"
 tags:
     - Crawler
 ---
-
 ### 一、创建Scrapy项目
 在cmd中输入一下指令创建一个新的scrapy项目及一个爬虫
 
@@ -23,7 +22,7 @@ scrapy genspider -t basic goods jd.com
 ### 二、容器设置
 在京东商城笔记本电脑分类下进入一个商品页面，在“”规格与包装”栏下可以看见该笔记本电脑的详细信息
 
-![](/img/in-post/old/20180810201914623_20190219140556252473.png)
+![](/media/editor/20180810201914623_20190219140556252473.png)
 
 经过筛选，在items.py下设置下列容器(忽略我的Chinglish命名法...)：
 

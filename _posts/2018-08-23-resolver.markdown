@@ -8,146 +8,146 @@ header-img: "img/post-bg-2015.jpg"
 tags:
     - Crawler
 ---
-## 1）XPath
-
-###### XPath通过标签(<tag></tag>)提取信息→更适用于爬虫
-
-### a.构造解析对象
-
-##### 方法一：处理文本
-
-```python
-from lxml import etree
-text = '''
-<ol class="carousel-indicators">
-	<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-	<li data-target="#myCarousel" data-slide-to="1" class=""></li>
-	<li data-target="#myCarousel" data-slide-to="2" class=""></li>
-	<li data-target="#myCarousel" data-slide-to="3" class=""></li>
-	<li data-target="#myCarousel" data-slide-to="4" class=""></li>
-	</ol>
-'''
-
-html = etree.HTML(text)
-```
-如果想输出HTML的文本内容，可以使用  ```result = etree.tostring(html).decode('utf-8')```由于tostring()返回的对象为bytes类型，所以这里使用decode('utf-8')进行解码
-
-##### 方法二：处理文件
-
-```python
-from lxml import etree
-html = etree.parse('./test.html', etree.HTMLParser)
-```
-
-### b.提取信息
-
-#### 常用规则
-/ : 选取当前节点的直接子节点
-
-text()：定位标签内容       例：
-```html/a/b/text() ```
-
-```python
-<html>
-<a>
-<b>abc</b>
-</a>
-</html>
-结果：abc
-```
-@选择标签属性：标签[@属性=属性值]
-
-//选取当前节点的所有子孙节点:```//li@[class='hidden-xs']/a/@href```
-```python
-<li class=''hidden-xs>
-<a href="www.baidu,com"></a>
-</li>
-
-结果：www.baidu.com
-```
-contains(attr, value)：属性多值匹配，attr为属性名，value为属性值，只要value在attr中即可匹配成功
-
-按序选择：
-```python
-//li[1]             #选取第一个节点，这里的序号是从1开始
-//li[last()]        #选取最后一个节点
-//li[position()<4]  #选取前三个节点
-//li[last()-3]      #选取倒数第四个节点
-```
-
-#### 提取
-
-```python
-from lxml import etree
-html = etree.parse('./test.html', etree.HTMLParser)
-result = html.xpath('//li[@name='show' and contains(@class, 'li')]')
-```
-
-## 2) Beautiful Soup
-### a) 基本操作
-
-```python
-html = '
-    <ol class="carousel-indicators">
-    	<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-    	<li data-target="#myCarousel" data-slide-to="1" class=""></li>
-    	<li data-target="#myCarousel" data-slide-to="2" class=""></li>
-    	<li data-target="#myCarousel" data-slide-to="3" class=""></li>
-    	<li data-target="#myCarousel" data-slide-to="4" class=""></li>
-    	</ol>
-'
-
-from bs4 import BeautifulSoup
-soup = BeautifulSoup(html, 'lxml')
-```
-这样就构造了一个BeautifulSoup对象，在初始化BeautifulSoup对象时会自动更正字符串内的HTML格式
-
-使用    ```soup.prettify()```  可以将要解析的字符串以标准缩进的格式输出
-
-### b) 节点选择
-假设soup为一个已初始化的BeautifulSoup对象
-
-
-代码 | 功能
----|---
-```soup.a```| 选取名称为a的节点
-```soup.a.string```| 选取节点a的内容
-```soup.a.name```| 选取节点a的名称
-```soup.a['name'] / soup.a.attrs['name']```| 选取节点a的name属性的值，返回str类型
-```soup.a['class']```| 选取节点a的class属性的值，返回list类型
-```soup.a.contents```| 选取节点a的内容及直接子节点
-```soup.a.childrem```| 同上
-```soup.a.descendants```| 选取节点a的所有子孙节点
-```soup.a.parent```| 选取节点a的父节点
-```soup.a.parents```| 选取节点a的祖先节点，返回生成器类型
-```soup.a.next_sibling```| 选取节点a的下一个同级节点
-```soup.a.previous_sibling```| 选取节点a的上一个同级节点
-```soup.a.next_siblings```| 选取节点a之后的同级节点，返回生成器类型
-```soup.a.previous_siblings```| 选取节点a之前的同级节点， 返回生成器类型
-
-所有返回类型为生成器的选择结果可以使用遍历来获取其中内容：
-```python
-for i, child in enumerate(soup.a.descendants):
-    print(i, child)
-```
-这样就将索引和内容同时输出
-
-### c) 方法选择器
-#### find_all()
-
-```find_all(name='li')```:选取节点名称为li的节点
-
-```find_all(attrs={'id':'a'})```:选取'id'属性的值为'a'的节点，attrs的参数必须是字典类型
-
-```find_all(text=re.compile('abc'))```:选取匹配正则表达式的节点文本组成的列表
-
-#### find()
-选取符合选取规则的第一个节点
-#### find_parents()
-选取所有祖先节点
-#### find_parent()
-选取直接父节点
-#### find_next_siblings(), find_next_sibling()
-#### find_previous_siblings(), find_previous_sibling()
-#### find_all_next(), find_next()
+## 1）XPath
+
+###### XPath通过标签(<tag></tag>)提取信息→更适用于爬虫
+
+### a.构造解析对象
+
+##### 方法一：处理文本
+
+```python
+from lxml import etree
+text = '''
+<ol class="carousel-indicators">
+	<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+	<li data-target="#myCarousel" data-slide-to="1" class=""></li>
+	<li data-target="#myCarousel" data-slide-to="2" class=""></li>
+	<li data-target="#myCarousel" data-slide-to="3" class=""></li>
+	<li data-target="#myCarousel" data-slide-to="4" class=""></li>
+	</ol>
+'''
+
+html = etree.HTML(text)
+```
+如果想输出HTML的文本内容，可以使用  ```result = etree.tostring(html).decode('utf-8')```由于tostring()返回的对象为bytes类型，所以这里使用decode('utf-8')进行解码
+
+##### 方法二：处理文件
+
+```python
+from lxml import etree
+html = etree.parse('./test.html', etree.HTMLParser)
+```
+
+### b.提取信息
+
+#### 常用规则
+/ : 选取当前节点的直接子节点
+
+text()：定位标签内容       例：
+```html/a/b/text() ```
+
+```python
+<html>
+<a>
+<b>abc</b>
+</a>
+</html>
+结果：abc
+```
+@选择标签属性：标签[@属性=属性值]
+
+//选取当前节点的所有子孙节点:```//li@[class='hidden-xs']/a/@href```
+```python
+<li class=''hidden-xs>
+<a href="www.baidu,com"></a>
+</li>
+
+结果：www.baidu.com
+```
+contains(attr, value)：属性多值匹配，attr为属性名，value为属性值，只要value在attr中即可匹配成功
+
+按序选择：
+```python
+//li[1]             #选取第一个节点，这里的序号是从1开始
+//li[last()]        #选取最后一个节点
+//li[position()<4]  #选取前三个节点
+//li[last()-3]      #选取倒数第四个节点
+```
+
+#### 提取
+
+```python
+from lxml import etree
+html = etree.parse('./test.html', etree.HTMLParser)
+result = html.xpath('//li[@name='show' and contains(@class, 'li')]')
+```
+
+## 2) Beautiful Soup
+### a) 基本操作
+
+```python
+html = '
+    <ol class="carousel-indicators">
+    	<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    	<li data-target="#myCarousel" data-slide-to="1" class=""></li>
+    	<li data-target="#myCarousel" data-slide-to="2" class=""></li>
+    	<li data-target="#myCarousel" data-slide-to="3" class=""></li>
+    	<li data-target="#myCarousel" data-slide-to="4" class=""></li>
+    	</ol>
+'
+
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(html, 'lxml')
+```
+这样就构造了一个BeautifulSoup对象，在初始化BeautifulSoup对象时会自动更正字符串内的HTML格式
+
+使用    ```soup.prettify()```  可以将要解析的字符串以标准缩进的格式输出
+
+### b) 节点选择
+假设soup为一个已初始化的BeautifulSoup对象
+
+
+代码 | 功能
+---|---
+```soup.a```| 选取名称为a的节点
+```soup.a.string```| 选取节点a的内容
+```soup.a.name```| 选取节点a的名称
+```soup.a['name'] / soup.a.attrs['name']```| 选取节点a的name属性的值，返回str类型
+```soup.a['class']```| 选取节点a的class属性的值，返回list类型
+```soup.a.contents```| 选取节点a的内容及直接子节点
+```soup.a.childrem```| 同上
+```soup.a.descendants```| 选取节点a的所有子孙节点
+```soup.a.parent```| 选取节点a的父节点
+```soup.a.parents```| 选取节点a的祖先节点，返回生成器类型
+```soup.a.next_sibling```| 选取节点a的下一个同级节点
+```soup.a.previous_sibling```| 选取节点a的上一个同级节点
+```soup.a.next_siblings```| 选取节点a之后的同级节点，返回生成器类型
+```soup.a.previous_siblings```| 选取节点a之前的同级节点， 返回生成器类型
+
+所有返回类型为生成器的选择结果可以使用遍历来获取其中内容：
+```python
+for i, child in enumerate(soup.a.descendants):
+    print(i, child)
+```
+这样就将索引和内容同时输出
+
+### c) 方法选择器
+#### find_all()
+
+```find_all(name='li')```:选取节点名称为li的节点
+
+```find_all(attrs={'id':'a'})```:选取'id'属性的值为'a'的节点，attrs的参数必须是字典类型
+
+```find_all(text=re.compile('abc'))```:选取匹配正则表达式的节点文本组成的列表
+
+#### find()
+选取符合选取规则的第一个节点
+#### find_parents()
+选取所有祖先节点
+#### find_parent()
+选取直接父节点
+#### find_next_siblings(), find_next_sibling()
+#### find_previous_siblings(), find_previous_sibling()
+#### find_all_next(), find_next()
 #### find_all_previous(), find_previous()
