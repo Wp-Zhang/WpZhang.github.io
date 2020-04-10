@@ -1,0 +1,96 @@
+I"�"<h3 id="题目求两数的最大公约数和最小公倍数">题目：求两数的最大公约数和最小公倍数</h3>
+<hr />
+<blockquote>
+  <p>关键在于求最大公约数，求出最大公约数后就可以算出最小公倍数</p>
+</blockquote>
+
+<h4 id="方法一">方法一</h4>
+<p>        简单的暴力寻找：设p为两数m,n中的较小数，设置死循环：</p>
+<ol>
+  <li>若p同时整除m和n，则p为m和n的最大公约数，退出循环；</li>
+  <li>否则p-1，返回步骤1</li>
+</ol>
+
+<h5 id="c代码">C++代码：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">getGCD_method1</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">){</span>
+	<span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">?</span> <span class="n">n</span> <span class="o">:</span> <span class="n">m</span><span class="p">;</span>
+	<span class="k">while</span> <span class="p">(</span><span class="n">m</span> <span class="o">%</span> <span class="n">p</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">%</span> <span class="n">p</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">p</span><span class="o">--</span><span class="p">;</span>
+	<span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+	<span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">getGCD_method1</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="方法二">方法二</h4>
+<p>        辗转相除法：设置死循环(使用递归也可以)：</p>
+<ol>
+  <li>取两数中的较大数为m，较小数为n；</li>
+  <li>若m%n为0，则n为最大公约数，退出循环；</li>
+  <li>将原来的两个数替换为n和m%n，返回步骤1</li>
+</ol>
+
+<h5 id="c代码-循环">C++代码-循环</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">getGCD_method2</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">){</span>
+	<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">){</span>
+			<span class="n">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="p">;</span>
+			<span class="n">n</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">n</span><span class="p">;</span>
+			<span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">n</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">%</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+		<span class="k">else</span><span class="p">{</span>
+			<span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">m</span> <span class="o">%</span> <span class="n">n</span><span class="p">;</span>
+			<span class="n">m</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+			<span class="n">n</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+	<span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">getGCD_method2</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="c代码-递归">C++代码-递归</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">getGCD_method3</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">){</span>
+		<span class="n">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="p">;</span>
+		<span class="n">n</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">n</span><span class="p">;</span>
+		<span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">-</span> <span class="n">n</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">%</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+	<span class="k">else</span> <span class="n">getGCD_method3</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">%</span> <span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+	<span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+	<span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">getGCD_method3</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="两种方法直观比较">两种方法直观比较：</h5>
+<p><img src="/media/editor/GOD&amp;LCM_20190305140314184779.png" alt="" /></p>
+
+<h3 id="求最小公倍数">求最小公倍数</h3>
+<h5 id="c代码-1">C++代码：</h5>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">getLCM</span><span class="p">(</span><span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">){</span>
+	<span class="k">return</span> <span class="n">m</span> <span class="o">*</span> <span class="n">n</span> <span class="o">/</span> <span class="n">getGCD_method2</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+:ET

@@ -1,0 +1,69 @@
+I"�<h3 id="1定制admin后台">1.定制admin后台</h3>
+
+<h5 id="1进入modelspy">1).进入models.py</h5>
+
+<p>在数据模型类中定义函数：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+</code></pre></div></div>
+
+<p>这样就在后台管理Article模型时将显示文章的标题：</p>
+
+<p><img src="/img/in-post/old/20181109125151777_20190219134145350035.png" alt="" /></p>
+
+<h4 id="2进入adminpy">2).进入admin.py</h4>
+
+<p><strong>a. 定义一个数据模型的专属类继承</strong> admin.ModelAdmin类，其中设置将要显示的详细信息组成的元组/列表(由于后期无需修改，设置为元组比较好)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">class</span> <span class="nc">ArticleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s">'id'</span><span class="p">,</span> <span class="s">'title'</span><span class="p">,</span> <span class="s">'created_date'</span><span class="p">,</span> <span class="s">'update_date'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p><strong>b. 在注册数据模型时添加之前建立的类为参数</strong></p>
+
+<p>方法一：在类之后添加如下语句</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">ArticleAdmin</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>方法二：在类之前添加修饰器：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="o">@</span><span class="n">admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ArticleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+
+    <span class="o">...</span>
+
+</code></pre></div></div>
+
+<p>完成之后后台显示如下：</p>
+
+<p><img src="/img/in-post/old/20181109125333222_20190219134208857651.png" alt="" /></p>
+
+<p>发现目前排序方式为以ID的倒序排序，可以在admin.py中修改：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">class</span> <span class="nc">ArticleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s">'id'</span><span class="p">,</span> <span class="s">'title'</span><span class="p">,</span> <span class="s">'created_date'</span><span class="p">,</span> <span class="s">'update_date'</span><span class="p">)</span>
+
+    <span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span><span class="s">'id'</span><span class="p">,)</span>  <span class="c1">#根据id顺序排列
+</span>
+    <span class="c1">#ordering = ('-id',) 根据id倒序排列
+</span>
+</code></pre></div></div>
+
+<p>更改结果如下：</p>
+
+<p><img src="/img/in-post/old/20181109125419747_20190219134239273757.png" alt="" /></p>
+:ET

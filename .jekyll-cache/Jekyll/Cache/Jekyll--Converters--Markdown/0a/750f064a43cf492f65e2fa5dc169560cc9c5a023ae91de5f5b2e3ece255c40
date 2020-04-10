@@ -1,0 +1,834 @@
+I"s<p>*这里实现的是超星在线学习平台上课程的自动听取，虽然最终成功了但是由于并不了解网站后台的监控机制，还是乖乖肉身听课吧（逃</p>
+
+<hr />
+
+<h3 id="一主体结构">一、主体结构</h3>
+
+<p>由于实现的功能并不是十分复杂，这里只构造了一个AutoStudent类来完成自动听课，主要分为四个模块：</p>
+
+<ol>
+  <li>
+    <p>用户登录</p>
+  </li>
+  <li>
+    <p>选择课程</p>
+  </li>
+  <li>
+    <p>检测尚未完成的小节</p>
+  </li>
+  <li>
+    <p>自动听课</p>
+  </li>
+</ol>
+
+<h3 id="二详细步骤">二、详细步骤</h3>
+
+<h5 id="1init">1.<strong>init</strong>()</h5>
+
+<p>首先创建一个类并定义初始化函数，在此函数中定义类变量self.browser用于访问页面，self.courseList用于存储之后检测到的尚未完成的小节，self.db用于访问数据库。</p>
+
+<p>为了避免Chromedriver的元素定位问题，要将浏览器窗口最大化</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>之后建立与数据库的连接并检测是否已创建表StudentInfo</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">pymysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">'localhost'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">'root'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'Zwp0816...'</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">'ChaoXingStuInfo'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">'CREATE TABLE IF NOT EXISTS StudentInfo(账号 VARCHAR(30), 密码 VARCHAR(20));'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>至此，<strong>init</strong>()函数结束，以下为完整代码</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="kn">import</span> <span class="nn">pymysql</span>
+
+
+
+<span class="k">class</span> <span class="nc">AutoStudent</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">courseList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">pymysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">'localhost'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">'root'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'*******'</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">'ChaoXingStuInfo'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">'CREATE TABLE IF NOT EXISTS StudentInfo(账号 VARCHAR(30), 密码 VARCHAR(20));'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h5 id="2login">2.login()</h5>
+
+<p>基本准备工作完成以后就可以用浏览器登录课程界面了。定义login()函数用以实现这个功能。</p>
+
+<p>a).首先读取数据库中已存储的信息并显示，并让用户选择，如果不使用已有信息则提示输入，输入后询问是否将新的信息存入数据库</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="n">choice1</span> <span class="o">=</span> <span class="s">''</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">'SELECT * FROM StudentInfo'</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+
+                <span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">===================数据库中已有学生信息==================="</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)):</span>
+
+                    <span class="k">print</span><span class="p">(</span>
+
+                        <span class="s">"</span><span class="se">\n</span><span class="s">编号："</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">"</span><span class="se">\t</span><span class="s">账号："</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">'</span><span class="se">\t</span><span class="s">密码：'</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+
+                <span class="n">choice1</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"是否使用数据库中已有学生信息？(y/n) &gt;&gt;&gt;"</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">choice1</span> <span class="o">==</span> <span class="s">'y'</span><span class="p">:</span>
+
+                    <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"输入要使用的信息编号："</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+
+                        <span class="n">account</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="n">password</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+                        <span class="k">break</span>
+
+                    <span class="k">except</span><span class="p">:</span>
+
+                        <span class="k">print</span><span class="p">(</span><span class="s">"输入错误！"</span><span class="p">)</span>
+
+                        <span class="k">continue</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">account</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入账号："</span><span class="p">)</span>
+
+                    <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入密码："</span><span class="p">)</span>
+
+                    <span class="k">break</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">account</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入账号："</span><span class="p">)</span>
+
+                <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入密码："</span><span class="p">)</span>
+
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">choice1</span> <span class="o">!=</span> <span class="s">'y'</span><span class="p">:</span>
+
+            <span class="n">choice2</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">是否将学生信息存入数据库？(y/n)"</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">choice2</span> <span class="o">==</span> <span class="s">'y'</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">choice1</span> <span class="o">!=</span> <span class="s">'y'</span><span class="p">:</span>
+
+                    <span class="n">sql</span> <span class="o">=</span> <span class="s">'INSERT INTO StudentInfo VALUES(</span><span class="si">%</span><span class="s">s, </span><span class="si">%</span><span class="s">s)'</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="n">account</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>b).访问登录页面并定位账号输入框、密码输入框、验证码输入框、登录按钮这四个元素</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">正在登陆..."</span><span class="p">)</span>
+
+        <span class="n">loginUrl</span> <span class="o">=</span> <span class="s">"http://passport2.chaoxing.com/login?fid=185"</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">loginUrl</span><span class="p">)</span>
+
+        <span class="c1">#定位元素位置
+</span>
+        <span class="n">inputAccount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="unameId"]'</span><span class="p">)</span>
+
+        <span class="n">inputPassword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="passwordId"]'</span><span class="p">)</span>
+
+        <span class="n">inputCAPCHA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="numcode"]'</span><span class="p">)</span>
+
+        <span class="n">loginBtn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="form"]/table/tbody/tr[7]/td[2]/label/input'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>c).向页面输入账号、密码、验证码</p>
+
+<p>这里验证码的识别使用了最简单粗暴的肉眼识别，保存登录页面截图并显示后提示用户输入</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+     
+
+        <span class="n">inputAccount</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+
+        <span class="n">inputPassword</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">save_screenshot</span><span class="p">(</span><span class="s">'screenshot.png'</span><span class="p">)</span>
+
+        <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'screenshot.png'</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="n">CAPCHA</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入验证码 &gt;&gt;&gt;"</span><span class="p">)</span>
+
+        <span class="n">inputCAPCHA</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">CAPCHA</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>d).点击登录按钮登录，若登录失败提示重新登录</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="n">loginBtn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">current_url</span> <span class="o">==</span> <span class="s">"http://passport2.chaoxing.com/login?refer=http</span><span class="si">%3</span><span class="s">A</span><span class="si">%2</span><span class="s">F</span><span class="si">%2</span><span class="s">Fi.mooc.chaoxing.com"</span><span class="p">:</span>
+
+            <span class="k">print</span><span class="p">(</span><span class="s">"登陆出错，请重新登陆..."</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"登陆成功"</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h5 id="3choosecourse">3.chooseCourse()</h5>
+
+<p>登录后进入课程界面，定位课程元素位置，注意课程元素在一个frame中</p>
+
+<p><img src="/img/in-post/old/20181021220038420_20190219134426691272.png" alt="" /></p>
+
+<p>切换到该frame后才可以对该元素进行点击操作，点击课程后会打开新的标签页，需要切换到新的标签页以进入课程界面</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">def</span> <span class="nf">chooseCourse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'frame_content'</span><span class="p">)</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//div[@class="Mcon1img httpsClass"]/a[1]'</span><span class="p">)</span>
+
+        <span class="n">img</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">window_handles</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"已进入课程界面"</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h5 id="4getnextcourse">4.getNextCourse()</h5>
+
+<p>首先在页面中定位课程列表</p>
+
+<p><img src="/img/in-post/old/20181021220925621_20190219134453946809.png" alt="" /></p>
+
+<p>展开单个课程，会发现未完成的课程的一个节点的class属性值为orange，可以以此来判断课程是否已经完成学习</p>
+
+<p><img src="/img/in-post/old/20181021221239237_20190219134536054138.png" alt="" /></p>
+
+<p>因此获取到所有课程列表后遍历每一个课程，检测该节点的class值是否为orange。注意到综合测试题也符合该规律，因此用if语句排除掉。最后返回第一个未完成的课程的元素对象。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">def</span> <span class="nf">getNextCourse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_elements_by_css_selector</span><span class="p">(</span><span class="s">'h3.clearfix'</span><span class="p">)</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)):</span>
+
+            <span class="k">if</span> <span class="s">"orange"</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.icon em'</span><span class="p">)</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'class'</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="s">"综合测试题"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.articlename'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+
+                    <span class="n">course</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.articlename'</span><span class="p">)</span>
+
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="k">return</span> <span class="n">course</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+</code></pre></div></div>
+
+<h5 id="5watchvideo">5.watchVideo()</h5>
+
+<p>这个函数用来观看视频。首先调用self.getNextCourse()获取要观看的课程元素在页面中的位置，然后点击进入观看课程的界面</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="n">course</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNextCourse</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">course</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">course</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>进入页面，定位视频位置</p>
+
+<p><img src="/img/in-post/old/20181021222131579_20190219134605792230.png" alt="" /></p>
+
+<p>定位到目标元素后点击播放，注意视频还是在一个frame中</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'iframe'</span><span class="p">)</span>
+
+        <span class="n">playBtn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.ans-attach-ct'</span><span class="p">)</span>
+
+        <span class="n">webdriver</span><span class="o">.</span><span class="n">ActionChains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">move_to_element</span><span class="p">(</span><span class="n">playBtn</span><span class="p">)</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+
+        <span class="n">playBtn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>至此，视频就可以成功播放了，但还需检测视频是否播放完成，如果播放完成，返回之前的界面，否则继续播放。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ifFinished</span><span class="p">():</span>
+
+               <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">back</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+
+</code></pre></div></div>
+
+<p>这里调用的self.ifFinished()函数将在之后实现</p>
+
+<h5 id="6iffinished">6.ifFinished()</h5>
+
+<p>该函数用于检测视频是否播放完成，这里实现的检测思路是定时截取视频左上角任务点，检测其主要颜色，如果是绿色则播放完成。</p>
+
+<p>首先截取整个页面，然后转化便于之后的颜色识别</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="n">screenshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get_screenshot_as_png</span><span class="p">()</span>
+
+        <span class="n">screenshot</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">screenshot</span><span class="p">))</span>
+
+        <span class="n">screenshot</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">'RGB'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>然后定位该图标位置</p>
+
+<p><img src="/img/in-post/old/20181021223131709_20190219134641801851.png" alt="" /></p>
+
+<p>然后根据该元素大小裁剪截图（由于该元素在frame中，用location获取的位置是在frame中的相对位置，这里就直接粗暴的用绝对坐标来定位截取图片的位置）</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'div.ans-job-icon'</span><span class="p">)</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="mi">456</span>
+
+        <span class="n">top</span> <span class="o">=</span> <span class="mi">340</span>
+
+        <span class="n">elementWidth</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="s">'width'</span><span class="p">]</span>
+
+        <span class="n">elementHeight</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span>
+
+        <span class="n">screenshot</span> <span class="o">=</span> <span class="n">screenshot</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">elementWidth</span><span class="p">,</span> <span class="n">elementHeight</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<p>图片截取完后进行颜色识别，判断主要颜色的色域范围，如果为绿色则返回True即视频结束，否则返回False</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDominantColor</span><span class="p">(</span><span class="n">screenshot</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="mi">230</span><span class="o">&lt;</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">245</span> <span class="ow">and</span> <span class="mi">165</span><span class="o">&lt;</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">180</span> <span class="ow">and</span> <span class="mi">30</span><span class="o">&lt;</span><span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">45</span><span class="p">:</span>
+
+            <span class="k">print</span><span class="p">(</span><span class="s">"Watching..."</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+
+</code></pre></div></div>
+
+<p>这里使用的颜色识别函数稍后实现</p>
+
+<h5 id="7getdominantcolorimage">7.getDominantColor(image)</h5>
+
+<p>这个函数传入一个PIL.Image对象，返回其主要颜色的rgb值构成的元组</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+     <span class="k">def</span> <span class="nf">getDominantColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+
+        <span class="n">max_score</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+        <span class="n">dominant_color</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">getcolors</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+
+            <span class="c1"># 转为HSV标准
+</span>
+            <span class="n">saturation</span> <span class="o">=</span> <span class="n">colorsys</span><span class="o">.</span><span class="n">rgb_to_hsv</span><span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">g</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">2104</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="mi">4130</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="mi">802</span> <span class="o">+</span> <span class="mi">4096</span> <span class="o">+</span> <span class="mi">131072</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">235</span><span class="p">)</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mf">16.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">235</span> <span class="o">-</span> <span class="mi">16</span><span class="p">)</span>
+
+
+
+            <span class="c1"># 忽略高亮色
+</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.9</span><span class="p">:</span>
+
+                <span class="k">continue</span>
+
+            <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">saturation</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">count</span>
+
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">max_score</span><span class="p">:</span>
+
+                <span class="n">max_score</span> <span class="o">=</span> <span class="n">score</span>
+
+                <span class="n">dominant_color</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dominant_color</span>
+
+</code></pre></div></div>
+
+<h5 id="8run">8.run()</h5>
+
+<p>这个函数用于所有类成员函数的调用，模拟整个听课过程</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">chooseCourse</span><span class="p">()</span>    <span class="c1">#选择课程
+</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>    
+
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchVideo</span><span class="p">()</span>    
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>    <span class="c1">#如果所有课程全部听完则退出循环
+</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">"课程全部听取完成！"</span><span class="p">)</span>
+
+                <span class="k">break</span>
+
+</code></pre></div></div>
+
+<p>     至此，AutoStudent类已实现</p>
+
+<h5 id="9main">9.main()</h5>
+
+<p>在主函数中实例化一个AuyoStudent对象并调用其run()函数，实现自动听课</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">robot</span> <span class="o">=</span> <span class="n">AutoStudent</span><span class="p">()</span>
+
+    <span class="n">robot</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h3 id="三源代码">三、源代码</h3>
+
+<p>这里给出的源码比较混乱，但跑起来还是没问题的</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+
+<span class="kn">import</span> <span class="nn">colorsys</span>
+
+<span class="kn">import</span> <span class="nn">pymysql</span>
+
+
+
+<span class="k">class</span> <span class="nc">AutoStudent</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1">#opt = webdriver.ChromeOptions()
+</span>
+        <span class="c1">#opt.add_argument('--headless')
+</span>
+        <span class="c1">#self.browser = webdriver.Chrome(chrome_options=opt)
+</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">maximize_window</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">courseList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">pymysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">'localhost'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">'root'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'*******'</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">'ChaoXingStuInfo'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">'CREATE TABLE IF NOT EXISTS StudentInfo(账号 VARCHAR(30), 密码 VARCHAR(20));'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+
+    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">choice1</span> <span class="o">=</span> <span class="s">''</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">'SELECT * FROM StudentInfo'</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+
+                <span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">===================数据库中已有学生信息==================="</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)):</span>
+
+                    <span class="k">print</span><span class="p">(</span>
+
+                        <span class="s">"</span><span class="se">\n</span><span class="s">编号："</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">"</span><span class="se">\t</span><span class="s">账号："</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">'</span><span class="se">\t</span><span class="s">密码：'</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+
+                <span class="n">choice1</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"是否使用数据库中已有学生信息？(y/n) &gt;&gt;&gt;"</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">choice1</span> <span class="o">==</span> <span class="s">'y'</span><span class="p">:</span>
+
+                    <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"输入要使用的信息编号："</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+
+                        <span class="n">account</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="n">password</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+                        <span class="k">break</span>
+
+                    <span class="k">except</span><span class="p">:</span>
+
+                        <span class="k">print</span><span class="p">(</span><span class="s">"输入错误！"</span><span class="p">)</span>
+
+                        <span class="k">continue</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">account</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入账号："</span><span class="p">)</span>
+
+                    <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入密码："</span><span class="p">)</span>
+
+                    <span class="k">break</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">account</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入账号："</span><span class="p">)</span>
+
+                <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入密码："</span><span class="p">)</span>
+
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">choice1</span> <span class="o">!=</span> <span class="s">'y'</span><span class="p">:</span>
+
+            <span class="n">choice2</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">是否将学生信息存入数据库？(y/n)"</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">choice2</span> <span class="o">==</span> <span class="s">'y'</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">choice1</span> <span class="o">!=</span> <span class="s">'y'</span><span class="p">:</span>
+
+                    <span class="n">sql</span> <span class="o">=</span> <span class="s">'INSERT INTO StudentInfo VALUES(</span><span class="si">%</span><span class="s">s, </span><span class="si">%</span><span class="s">s)'</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="n">account</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">正在登陆..."</span><span class="p">)</span>
+
+        <span class="n">loginUrl</span> <span class="o">=</span> <span class="s">"http://passport2.chaoxing.com/login?fid=185"</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">loginUrl</span><span class="p">)</span>
+
+        <span class="c1">#定位元素位置
+</span>
+        <span class="n">inputAccount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="unameId"]'</span><span class="p">)</span>
+
+        <span class="n">inputPassword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="passwordId"]'</span><span class="p">)</span>
+
+        <span class="n">inputCAPCHA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="numcode"]'</span><span class="p">)</span>
+
+        <span class="n">loginBtn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//*[@id="form"]/table/tbody/tr[7]/td[2]/label/input'</span><span class="p">)</span>
+
+        <span class="s">'''
+
+        验证码截图
+
+        CAPCHAImage = re.compile('img src="(.*?)".*?id="numVerCode"').findall(self.browser.page_source)[0]
+
+        CAPCHAImage = self.browser.find_element_by_xpath('//img[@id="numVerCode"]')
+
+        left = CAPCHAImage.location['x']
+
+        top = CAPCHAImage.location['y']
+
+        right = left + CAPCHAImage.size['width']
+
+        bottom = top + CAPCHAImage.size['height']
+
+        image = image.crop((left, top, right, bottom))
+
+        '''</span>
+
+        <span class="c1">#填入信息
+</span>
+        <span class="n">inputAccount</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+
+        <span class="n">inputPassword</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+
+        <span class="c1">#Image.open('./CAPCHAImage.jpg').show()
+</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">save_screenshot</span><span class="p">(</span><span class="s">'screenshot.png'</span><span class="p">)</span>
+
+        <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'screenshot.png'</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="n">CAPCHA</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"输入验证码 &gt;&gt;&gt;"</span><span class="p">)</span>
+
+        <span class="n">inputCAPCHA</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">CAPCHA</span><span class="p">)</span>
+
+        <span class="n">loginBtn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">current_url</span> <span class="o">==</span> <span class="s">"http://passport2.chaoxing.com/login?refer=http</span><span class="si">%3</span><span class="s">A</span><span class="si">%2</span><span class="s">F</span><span class="si">%2</span><span class="s">Fi.mooc.chaoxing.com"</span><span class="p">:</span>
+
+            <span class="k">print</span><span class="p">(</span><span class="s">"登陆出错，请重新登陆..."</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"登陆成功"</span><span class="p">)</span>
+
+
+
+    <span class="k">def</span> <span class="nf">chooseCourse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1">#print(self.browser.page_source)
+</span>
+        <span class="c1">#time.sleep(5)
+</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'frame_content'</span><span class="p">)</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s">'//div[@class="Mcon1img httpsClass"]/a[1]'</span><span class="p">)</span>
+
+        <span class="n">img</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">window_handles</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"已进入课程界面"</span><span class="p">)</span>
+
+
+
+    <span class="k">def</span> <span class="nf">getNextCourse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_elements_by_css_selector</span><span class="p">(</span><span class="s">'h3.clearfix'</span><span class="p">)</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)):</span>
+
+            <span class="k">if</span> <span class="s">"orange"</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.icon em'</span><span class="p">)</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'class'</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="s">"综合测试题"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.articlename'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+
+                    <span class="n">course</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.articlename'</span><span class="p">)</span>
+
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="k">return</span> <span class="n">course</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+
+
+    <span class="k">def</span> <span class="nf">watchVideo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">course</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getNextCourse</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">course</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">course</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'iframe'</span><span class="p">)</span>
+
+        <span class="c1">#self.browser.switch_to.frame('ans-attach-online ans-insertvideo-online')
+</span>
+        <span class="n">playBtn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'.ans-attach-ct'</span><span class="p">)</span>
+
+        <span class="n">webdriver</span><span class="o">.</span><span class="n">ActionChains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">move_to_element</span><span class="p">(</span><span class="n">playBtn</span><span class="p">)</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
+
+        <span class="n">playBtn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ifFinished</span><span class="p">():</span>
+
+               <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">back</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+
+
+
+    <span class="k">def</span> <span class="nf">ifFinished</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">screenshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get_screenshot_as_png</span><span class="p">()</span>
+
+        <span class="n">screenshot</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">screenshot</span><span class="p">))</span>
+
+        <span class="n">screenshot</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">'RGB'</span><span class="p">)</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'div.ans-job-icon'</span><span class="p">)</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="mi">456</span>
+
+        <span class="n">top</span> <span class="o">=</span> <span class="mi">340</span>
+
+        <span class="n">elementWidth</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="s">'width'</span><span class="p">]</span>
+
+        <span class="n">elementHeight</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="n">target</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span>
+
+
+
+        <span class="n">screenshot</span> <span class="o">=</span> <span class="n">screenshot</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">elementWidth</span><span class="p">,</span> <span class="n">elementHeight</span><span class="p">))</span>
+
+        <span class="c1">#screenshot.show()
+</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDominantColor</span><span class="p">(</span><span class="n">screenshot</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="mi">230</span><span class="o">&lt;</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">245</span> <span class="ow">and</span> <span class="mi">165</span><span class="o">&lt;</span><span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">180</span> <span class="ow">and</span> <span class="mi">30</span><span class="o">&lt;</span><span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">45</span><span class="p">:</span>
+
+            <span class="k">print</span><span class="p">(</span><span class="s">"Watching..."</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+
+
+
+    <span class="k">def</span> <span class="nf">getDominantColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+
+        <span class="n">max_score</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+        <span class="n">dominant_color</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">getcolors</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+
+            <span class="c1"># 转为HSV标准
+</span>
+            <span class="n">saturation</span> <span class="o">=</span> <span class="n">colorsys</span><span class="o">.</span><span class="n">rgb_to_hsv</span><span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">g</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">2104</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="mi">4130</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="mi">802</span> <span class="o">+</span> <span class="mi">4096</span> <span class="o">+</span> <span class="mi">131072</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">235</span><span class="p">)</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mf">16.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">235</span> <span class="o">-</span> <span class="mi">16</span><span class="p">)</span>
+
+
+
+            <span class="c1"># 忽略高亮色
+</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.9</span><span class="p">:</span>
+
+                <span class="k">continue</span>
+
+            <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">saturation</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">count</span>
+
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">max_score</span><span class="p">:</span>
+
+                <span class="n">max_score</span> <span class="o">=</span> <span class="n">score</span>
+
+                <span class="n">dominant_color</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dominant_color</span>
+
+
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">chooseCourse</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchVideo</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+
+                <span class="k">print</span><span class="p">(</span><span class="s">"课程全部听取完成！"</span><span class="p">)</span>
+
+                <span class="k">break</span>
+
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">robot</span> <span class="o">=</span> <span class="n">AutoStudent</span><span class="p">()</span>
+
+    <span class="n">robot</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+
+    <span class="n">main</span><span class="p">()</span>
+
+</code></pre></div></div>
+:ET

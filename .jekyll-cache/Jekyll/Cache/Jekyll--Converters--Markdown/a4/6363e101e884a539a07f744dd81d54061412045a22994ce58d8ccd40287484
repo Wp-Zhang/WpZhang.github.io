@@ -1,0 +1,92 @@
+I"�(<h3 id="题目求乱序序列的中位数">题目：求乱序序列的中位数</h3>
+<hr />
+<h4 id="方法一">方法一</h4>
+<p>        最容易想到的解法，先将序列排序，再求出中位数</p>
+
+<h5 id="python代码">Python代码：</h5>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_median_1</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+	<span class="n">l</span> <span class="o">=</span> <span class="n">quick_sort</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>	<span class="c1"># 这里没有使用自带的sorted函数是为了之后直观地比较两种算法的区别
+</span>	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span> <span class="o">+</span> <span class="n">l</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
+</code></pre></div></div>
+
+<h4 id="方法二">方法二</h4>
+<p>        运用快速排序的思想，算法和topK问题的基本相同（之前也有写过相关的博文，可以看一下）。</p>
+
+<blockquote>
+  <p>设序列长度为n</p>
+</blockquote>
+
+<blockquote>
+  <p>若序列长度为奇数：</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>找出序列中最大的 <strong>int(n/2)+1</strong> 个数，形成新序列subset；</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>找出subset中最小的数即为中位数</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <p>若序列长度为偶数：</p>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>找出序列中最大的 <strong>n/2+1</strong> 个数，形成新序列subset；</li>
+  </ol>
+</blockquote>
+
+<blockquote>
+  <ol>
+    <li>找出subset中最小的两个数，求得的平均值即中位数</li>
+  </ol>
+</blockquote>
+
+<h5 id="python代码-1">Python代码</h5>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="k">def</span> <span class="nf">getK</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s">'top'</span><span class="p">):</span>
+	<span class="c1"># l为numpy的array类型
+</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">l</span>
+    <span class="n">pivot</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">'top'</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]]</span>
+        <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pivot</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">'min'</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]]</span>
+        <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pivot</span><span class="p">)</span>
+        
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">subset</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">getK</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">subset2</span> <span class="o">=</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]]</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">'top'</span> <span class="k">else</span> <span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">l</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">getK</span><span class="p">(</span><span class="n">subset2</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="n">length</span><span class="p">,</span> <span class="n">direction</span><span class="p">),</span> <span class="n">subset</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_median_2</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">getK</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="s">'top'</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">getK</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'min'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">getK</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s">'top'</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">getK</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">'min'</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></div>
+
+<h4 id="两种算法直观比较">两种算法直观比较：</h4>
+
+<p><img src="/media/editor/plot_20190320014027694428.png" alt="" /></p>
+:ET

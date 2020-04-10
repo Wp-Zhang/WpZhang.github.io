@@ -1,0 +1,123 @@
+I"�<h2 id="题目利用广度优先搜索求二叉树高度">题目：利用广度优先搜索求二叉树高度</h2>
+
+<hr />
+
+<h3 id="定义二叉树">定义二叉树</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">class</span> <span class="nc">TreeNode</span><span class="p">:</span>
+
+	<span class="s">"""
+
+	树节点
+
+	"""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+
+
+
+<span class="k">class</span> <span class="nc">BinTree</span><span class="p">:</span>
+
+	<span class="s">"""
+
+	树
+
+	"""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h3 id="方法一">方法一</h3>
+
+<p>        在检测到当层遍历完成时在节点队列中加入一个分隔节点用于分隔</p>
+
+<p><strong>Python代码：</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">getHightByBFS1</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+
+    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="p">,</span><span class="n">TreeNode</span><span class="p">(</span><span class="s">"#"</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)]</span>
+
+    <span class="n">hight</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="s">"#"</span><span class="p">:</span>
+
+            <span class="n">hight</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TreeNode</span><span class="p">(</span><span class="s">"#"</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+
+            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
+
+            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">hight</span>
+
+</code></pre></div></div>
+
+<h3 id="方法二">方法二</h3>
+
+<p>        用两个遍历分别存储下一层的节点数m2和当前层的节点数m1，每次遍历一个节点将m2减1，若该节点有子节点则m1加1，并将子节点加入到节点队列中。当m1减为零时说明当前层遍历完毕，于是高度加1，将m2赋给m1后将m2置0。</p>
+
+<p><strong>Python代码</strong>：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">getHightByBFS2</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+
+    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="p">]</span>
+
+    <span class="n">hight</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">count1</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">count2</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+
+            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+
+            <span class="n">count2</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
+
+            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+
+            <span class="n">count2</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">count1</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">count1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">count1</span> <span class="o">=</span> <span class="n">count2</span>
+
+            <span class="n">count2</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">hight</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">hight</span>
+
+</code></pre></div></div>
+:ET

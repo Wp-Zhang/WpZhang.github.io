@@ -1,0 +1,578 @@
+---
+layout:     post
+title:      利用AdaBoost元算法提高分类性能
+subtitle:   ""
+date:       2019-03-31 13:06:00
+author:     "Wp.Zhang"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - Machine Learning
+    - Data Science
+---
+## 理论知识
+
+
+
+### bagging：基于数据随机重抽样的分类器构建方法
+
+
+
+自举汇聚法(bootsrap aggregating)也称为bagging方法：通过从原始数据集选择S次后得到S个新数据集的一种技术，**新数据集和原数据集大小相等**，每个数据集由原始数据集中**有放回**的随机抽取的数据。将某个学习算法分别作用于S个数据集得到S个分类器，当对新数据进行分类时就使用这S个分类器对数据进行分类。
+
+
+
+### bossting
+
+
+
+boosting与bagging很相似，但是bagging中不同的分类器通过串行训练获得。每个新分类器都根据已经训练出的**分类器的性能**来进行训练，而boosting通过关注被已有分类器**错分的数据**来获得新分类器。bagging中的分类器权重相等，boosting中的分类器权重不等，每个权重代表对应分类器在上一轮迭代中的成功度。
+
+
+
+## 训练算法：基于错误提升分类器的性能
+
+
+
+AdaBoost是adaptive boosting的缩写。算法运行过程中：每个训练样本被赋予一个相等的初始权重，每次训练完成后分错的样本的权重将会提高，分对的样本的权重降低，且每个分类器也有根据其分类错误率计算出的权值alpha。
+
+
+
+错误率：<img src="http://latex.codecogs.com/gif.latex?%5Cvarepsilon%20%3D%20%5Cfrac%7Bnum%5C_of%5C_wrong%7D%7Ball%7D">  
+
+alpha: <img src="http://latex.codecogs.com/gif.latex?%5Calpha%20%3D%20%5Cfrac%7B1%7D%7B2%7D%20%5Cln%5Cleft%28%5Cfrac%7B1-%5Cvarepsilon%7D%7B%5Cvarepsilon%7D%20%5Cright%29">  
+
+分对的样本权重向量D: <img src="http://latex.codecogs.com/gif.latex?D%5E%28t&plus;1%29_i%20%3D%20%5Cfrac%7BD%5E%7B%28t%29%7D_ie%5E%7B-%5Calpha%7D%7D%7BSum%28D%29%7D">  
+
+分错的样本权重向量D: <img src="http://latex.codecogs.com/gif.latex?D%5E%28t&plus;1%29_i%20%3D%20%5Cfrac%7BD%5E%7B%28t%29%7D_ie%5E%7B%5Calpha%7D%7D%7BSum%28D%29%7D">
+
+
+
+## 基于单层决策树构建弱分类器
+
+
+
+单层决策树仅基于单个特征来做决策，只有一次分裂过程
+
+
+
+### 准备数据
+
+
+
+
+
+```python
+
+import numpy as np
+
+```
+
+
+
+
+
+```python
+
+def loadSimpData():
+
+    dataMat = np.mat([
+
+        [1, 2.1],
+
+        [2, 1.1],
+
+        [1.3, 1],
+
+        [1, 1],
+
+        [2, 1]
+
+    ], dtype='float')
+
+    classLabels = np.mat([1, 1, -1, -1, 1], dtype='int')
+
+    return dataMat, classLabels
+
+```
+
+
+
+
+
+```python
+
+dataMat, classLabels = loadSimpData()
+
+```
+
+
+
+### 单层决策树生成函数
+
+
+
+
+
+```python
+
+def stumpClassify(dataMatrix, dimen, threshVal, threshIneq):
+
+    """
+
+    通过阈值比较对数据进行分类
+
+    dataMat: 数据集
+
+    dimen: 要比较的目标列索引
+
+    threshVal: 阈值
+
+    threshIneq: 分类结果设置方式，若为'lt'则将所有小于等于阈值的值置-1，否则将所有大于阈值的值置-1
+
+    """
+
+    result = np.ones((dataMatrix.shape[0],1))
+
+    if threshIneq == 'lt':
+
+        result[dataMatrix[:,dimen] <= threshVal] = -1.0
+
+    else:
+
+        result[dataMatrix[:,dimen] > threshVal] = -1.0
+
+    return result
+
+```
+
+
+
+
+
+```python
+
+def buildStump(dataMat, classLabels, D):
+
+    """
+
+    遍历单层决策树的参数可能取值，构建多个决策树，根据分类结果返回最佳的决策树相关信息
+
+    dataMat: 数据集
+
+    classLabels: 数据集标签
+
+    D: 权重向量
+
+    """
+
+    labelMat = classLabels.T
+
+    numSteps = 10  # 步数
+
+    bestStump = {}  # 分类性能最佳时的参数
+
+    bestClassEst = np.mat((np.zeros((dataMat.shape[0],1))))  # 分类性能最佳时预测结果
+
+    minError = np.inf  # 最小错误率，初始时为无穷大
+
+    # 遍历所有特征
+
+    for i in range(dataMat.shape[1]):
+
+        rangeMin = dataMat[:,i].min()  # 数据集第i个特征最小值
+
+        rangeMax = dataMat[:,i].max()  # 数据集第i个特征最大值
+
+        stepSize = (rangeMax - rangeMin) / numSteps  # 每一步的大小
+
+        # 遍历所有阈值
+
+        for j in range(-1, numSteps+1):
+
+            # 遍历每种分类方式
+
+            for inequal in ['lt','gt']:
+
+                threshVal = rangeMin + j * stepSize  # 根据步数计算阈值
+
+                predictedVals = stumpClassify(dataMat, i, threshVal, inequal)
+
+                errArr = np.mat(np.ones((dataMat.shape[0], 1)))  # 分类错误的数据
+
+                errArr[predictedVals == labelMat] = 0  # 分类正确置0，错误置1
+
+                weightedError = D.T * errArr  # 计算加权错误率(利用矩阵相乘代替求和)
+
+                if weightedError < minError:
+
+                    minError = weightedError
+
+                    bestClassEst = predictedVals.copy()
+
+                    bestStump['dim'] = i
+
+                    bestStump['thresh'] = threshVal
+
+                    bestStump['ineq'] = inequal
+
+    return bestStump, minError, bestClassEst
+
+```
+
+
+
+
+
+```python
+
+D = np.mat(np.zeros((5,1))/5)
+
+buildStump(dataMat, classLabels, D)
+
+```
+
+
+
+
+
+
+
+
+
+    ({'dim': 0, 'thresh': 0.9, 'ineq': 'lt'}, matrix([[0.]]), array([[1.],
+
+            [1.],
+
+            [1.],
+
+            [1.],
+
+            [1.]]))
+
+
+
+
+
+
+
+## 完整AdaBoost算法实现 
+
+
+
+
+
+```python
+
+def adaBoostTrainDS(dataArr, classLabels, numIt=40):
+
+    weakClassArr = []  # 存储所有弱分类器的参数
+
+    m = dataArr.shape[0]
+
+    D = np.mat(np.ones((m,1))/m)  # 数据初始权重
+
+    aggClassEst = np.mat(np.zeros((m,1)))
+
+    for i in range(numIt):
+
+        # 构建单个决策树
+
+        bestStump, error, classEst = buildStump(dataArr, classLabels, D)
+
+        #print("D:", D.T)
+
+        alpha = float(0.5 * np.log((1-error)/max(error,1e-16)))  # 根据公式计算α，分母为max(error, 1e-16)是为了防止分母为0
+
+        bestStump['alpha'] = alpha
+
+        weakClassArr.append(bestStump)  # 将训练好的弱分类器添加入分类器列表
+
+        #print("classEst: ", classEst.T)
+
+        # 更新D
+
+        tmp = np.multiply(-1*alpha*np.mat(classLabels).T,classEst)
+
+        D = np.multiply(D,np.exp(tmp))
+
+        D = D / D.sum()
+
+        # 计算错误率
+
+        aggClassEst += classEst * alpha
+
+        #print("aggC;assEst: ", aggClassEst.T)
+
+        #aggErrors = (aggClassEst.T != classLabels).sum()
+
+        aggErrors = np.multiply(np.sign(aggClassEst) != np.mat(classLabels).T,np.ones((m,1)))
+
+        errorRate = aggErrors.sum() / dataArr.shape[0]
+
+        print("total error: ", errorRate)
+
+        # 错误率为0时提前终止
+
+        if errorRate == 0:
+
+            break
+
+    return weakClassArr
+
+```
+
+
+
+
+
+```python
+
+adaBoostTrainDS(dataMat, classLabels, 9)
+
+```
+
+
+
+    total error:  0.2
+
+    total error:  0.2
+
+    total error:  0.0
+
+    
+
+
+
+
+
+
+
+
+
+    [{'dim': 0, 'thresh': 1.3, 'ineq': 'lt', 'alpha': 0.6931471805599453},
+
+     {'dim': 1, 'thresh': 1.0, 'ineq': 'lt', 'alpha': 0.9729550745276565},
+
+     {'dim': 0, 'thresh': 0.9, 'ineq': 'lt', 'alpha': 0.8958797346140273}]
+
+
+
+
+
+
+
+## 测试算法：基于AdaBoost的分类
+
+
+
+### AdaBoost分类函数
+
+
+
+
+
+```python
+
+def adaClassify(dataMat, classifierArr):
+
+    aggClassEst = np.mat(np.zeros((dataMat.shape[0], 1)))
+
+    for i in range(len(classifierArr)):
+
+        classEst = stumpClassify(dataMat,classifierArr[i]['dim'],classifierArr[i]['thresh'],classifierArr[i]['ineq'])
+
+        aggClassEst += classifierArr[i]['alpha'] * classEst
+
+        #print(aggClassEst)
+
+    return np.sign(aggClassEst)
+
+```
+
+
+
+
+
+```python
+
+classifierArr = adaBoostTrainDS(dataMat, classLabels, 30)
+
+```
+
+
+
+    total error:  0.2
+
+    total error:  0.2
+
+    total error:  0.0
+
+    
+
+
+
+
+
+```python
+
+adaClassify(np.mat([[5,5], [0,0]]), classifierArr)
+
+```
+
+
+
+
+
+
+
+
+
+    matrix([[ 1.],
+
+            [-1.]])
+
+
+
+
+
+
+
+## 示例：在一个难数据集上应用AdaBoost
+
+
+
+### 加载数据
+
+
+
+
+
+```python
+
+def loadDataSet(fileName):
+
+    with open(fileName) as f:
+
+        data = f.readlines()
+
+    dataMat = np.mat(np.zeros((len(data), len(data[0].strip().split('\t'))-1)))
+
+    labels = np.mat(np.zeros((1, len(data))))
+
+    for i,line in enumerate(data):
+
+        tmp = line.strip().split('\t')
+
+        dataMat[i,:] = np.array(tmp[:-1],dtype='float')
+
+        labels[0,i] = int(float(tmp[-1]))
+
+    return dataMat, labels
+
+```
+
+
+
+
+
+```python
+
+dataMat, labelArr = loadDataSet('data/horseColicTraining2.txt')
+
+```
+
+
+
+### 利用AdaBoost分类
+
+
+
+训练分类器
+
+
+
+
+
+```python
+
+classifierArr = adaBoostTrainDS(dataMat, labelArr, 10)
+
+```
+
+
+
+    total error:  0.2842809364548495
+
+    total error:  0.2842809364548495
+
+    total error:  0.24749163879598662
+
+    total error:  0.24749163879598662
+
+    total error:  0.25418060200668896
+
+    total error:  0.2408026755852843
+
+    total error:  0.2408026755852843
+
+    total error:  0.22073578595317725
+
+    total error:  0.24749163879598662
+
+    total error:  0.23076923076923078
+
+    
+
+
+
+测试分类器
+
+
+
+
+
+```python
+
+testMat, testLabelArr = loadDataSet('data/horseColicTest2.txt')
+
+```
+
+
+
+
+
+```python
+
+prediction = adaClassify(testMat, classifierArr)
+
+```
+
+
+
+
+
+```python
+
+errArr = np.mat(np.ones_like(prediction))
+
+errArr[prediction!=testLabelArr.T].sum() / errArr.shape[0]
+
+```
+
+
+
+
+
+
+
+
+
+    0.23880597014925373
+
+
+
+
+
+
+
+可见使用AdaBoost进行分类时错误率为0.2388，比Logitic回归的0.35+的错误率要低

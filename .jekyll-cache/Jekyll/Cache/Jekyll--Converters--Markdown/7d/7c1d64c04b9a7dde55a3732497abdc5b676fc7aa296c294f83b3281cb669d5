@@ -1,0 +1,377 @@
+I"�}<h2 id="基本理论">基本理论</h2>
+
+<ul>
+  <li>
+    <p><strong>优点</strong>：计算代价不高，易于理解和实现</p>
+  </li>
+  <li>
+    <p><strong>缺点</strong>：容易欠拟合，分类精度可能不高</p>
+  </li>
+  <li>
+    <p><strong>适用数据类型</strong>：数值型和标称型数据</p>
+  </li>
+</ul>
+
+<p>预测结果得出后要将其进行分类。原始的函数有跃阶函数（即当值小于某个临界点时得0，大于时得1），但这样的瞬间跳跃有些时候不便于处理，于是这里使用另一个函数——sigmoid函数</p>
+
+<p>sigmoid函数：<img src="http://latex.codecogs.com/gif.latex?%5Csigma%20%28z%29%20%3D%20%5Cfrac%7B1%7D%7B1&plus;e%5E%7B-z%7D%7D" />，作图可知sigmoid函数的图像是一条平滑的曲线，这让之后求梯度的步骤变得十分容易且分类效果也要好很多。</p>
+
+<p>sigmoid函数的输入为z，最简单的情况下<img src="http://latex.codecogs.com/gif.latex?z%20%3D%20ax" />，但是当有多个特征时，公式变为<img src="http://latex.codecogs.com/gif.latex?z%20%3D%20w_1x_1%20&plus;%20w_2x_2%20&plus;%20...%20&plus;%20w_nx_n" />，为了便于数据的操作，引入矩阵运算：令<img src="http://latex.codecogs.com/gif.latex?w%20%3D%20%5Cbegin%7Bbmatrix%7Dw_1%20%26%20w_2%20%26%20...%20%26%20w_n%5Cend%7Bbmatrix%7D" />，则有<img src="http://latex.codecogs.com/gif.latex?z%20%3D%20w%5ETx" /></p>
+
+<h3 id="梯度上升下降法">梯度上升/下降法</h3>
+
+<p>函数f在点(x, y)的梯度可以表示为：<img src="http://latex.codecogs.com/gif.latex?%5Ctriangledown%20f%28x%2Cy%29%20%3D%20%5Cbegin%7Bpmatrix%7D%5Cfrac%7B%5Cpartial%20f%28x%2Cy%29%7D%7B%5Cpartial%20x%7D%5C%5C%5Cfrac%7B%5Cpartial%20f%28x%2Cy%29%7D%7B%5Cpartial%20y%7D%20%5Cend%7Bpmatrix%7D" />，即f(x,y)分别对x，y的偏导</p>
+
+<p>于是可以得出梯度上升/下降法中w的迭代公式：<img src="http://latex.codecogs.com/gif.latex?w%20%3D%20w%20&plus;%20%5Calpha%20%5Ctriangledown_w%20f%28w%29" />(梯度上升发为+，梯度下降法为-，二者的区别是前者求最大值，后者求最小值)，其中<img src="http://latex.codecogs.com/gif.latex?%5Calpha" />为学习率，其值越大，学习速率越快，但也越容易导致迭代不收敛。</p>
+
+<p>设置好学习率和初始的w矩阵以及最大的迭代次数后，就可以开始迭代。当到达最大迭代次数或某个停止条件时迭代停止，此时的w就是经过学习后的参数矩阵。</p>
+
+<h2 id="训练算法使用梯度上升找到最佳参数">训练算法：使用梯度上升找到最佳参数</h2>
+
+<h3 id="载入数据">载入数据</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">loadData</span><span class="p">():</span>
+
+    <span class="s">"""
+
+    从目录读取测试数据，将数据切分为数据矩阵和标签矩阵，并以np.array的格式返回
+
+    """</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'data/testSet.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">dataMat</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">labelMat</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">'int'</span><span class="p">)</span>
+
+    
+
+    <span class="k">return</span> <span class="n">dataMat</span><span class="p">,</span> <span class="n">labelMat</span>
+
+    
+
+</code></pre></div></div>
+
+<h3 id="梯度上升算法">梯度上升算法</h3>
+
+<h4 id="sigmoid函数">sigmoid函数</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">inX</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">inX</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<h4 id="梯度上升算法-1">梯度上升算法</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">gradAscent</span><span class="p">(</span><span class="n">dataMat</span><span class="p">,</span> <span class="n">classLabels</span><span class="p">):</span>
+
+    <span class="n">dataMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">dataMat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+
+    <span class="n">dataMatrix</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">dataMat</span>
+
+    <span class="n">classLabels</span> <span class="o">=</span> <span class="n">classLabels</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">classLabels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 将标签数据矩阵转置
+</span>
+    
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># 学习率
+</span>
+    <span class="n">maxCycles</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># 最大迭代次数
+</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">dataMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># 初始化系数矩阵
+</span>
+    <span class="c1"># 开始迭代
+</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxCycles</span><span class="p">):</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">@</span><span class="n">weights</span><span class="p">)</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="n">classLabels</span> <span class="o">-</span> <span class="n">z</span>  <span class="c1"># 计算错误量
+</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">dataMatrix</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">error</span>  <span class="c1"># 更新系数
+</span>
+
+
+    <span class="k">return</span> <span class="n">weights</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">dataMat</span><span class="p">,</span> <span class="n">labelMat</span> <span class="o">=</span> <span class="n">loadData</span><span class="p">()</span>
+
+<span class="n">gradAscent</span><span class="p">(</span><span class="n">dataMat</span><span class="p">,</span> <span class="n">labelMat</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h2 id="分析数据画出决策边界">分析数据：画出决策边界</h2>
+
+<h3 id="画出拟合直线">画出拟合直线</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">plotBestFit</span><span class="p">(</span><span class="n">weight</span><span class="p">):</span>
+
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+    
+
+    <span class="n">dataMat</span><span class="p">,</span> <span class="n">labelMat</span> <span class="o">=</span> <span class="n">loadData</span><span class="p">()</span>
+
+    <span class="n">x1</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">y1</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">x2</span> <span class="o">=</span> <span class="p">[];</span> <span class="n">y2</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataMat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+
+        <span class="k">if</span> <span class="n">labelMat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">x1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataMat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">y1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataMat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">x2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataMat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">y2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataMat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">'red'</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">'c'</span><span class="p">)</span>
+
+    
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">weight</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">weight</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">plotBestFit</span><span class="p">(</span><span class="n">gradAscent</span><span class="p">(</span><span class="n">dataMat</span><span class="p">,</span> <span class="n">labelMat</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<p><img src="/media/editor/output_20_0_20190328222420960806.png" alt="" /></p>
+
+<h2 id="训练算法随机梯度上升">训练算法：随机梯度上升?</h2>
+
+<p>之前的梯度上升算法每次更新系数都要遍历一次数据集，当数据集很庞大时将极为耗时。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">stocGradAscent</span><span class="p">(</span><span class="n">dataMat</span><span class="p">,</span> <span class="n">classLabels</span><span class="p">):</span>
+
+    <span class="n">dataMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">dataMat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataMat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">dataMatrix</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">dataMat</span>
+
+    <span class="n">classLabels</span> <span class="o">=</span> <span class="n">classLabels</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">classLabels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 将标签数据矩阵转置
+</span>
+    
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># 学习率
+</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># 初始化系数矩阵
+</span>
+    <span class="c1"># 开始迭代
+</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">@</span><span class="n">weights</span><span class="p">))</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="n">classLabels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span>  <span class="c1"># 计算错误量
+</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">error</span> <span class="o">*</span> <span class="n">dataMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># 更新系数
+</span>
+    <span class="k">return</span> <span class="n">weights</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">plotBestFit</span><span class="p">(</span><span class="n">stocGradAscent</span><span class="p">(</span><span class="n">dataMat</span><span class="p">,</span> <span class="n">labelMat</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<p><img src="/media/editor/output_24_0_20190328222348320357.png" alt="" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">stocGradAscent1</span><span class="p">(</span><span class="n">dataMatrix</span><span class="p">,</span> <span class="n">classLabels</span><span class="p">,</span> <span class="n">numIter</span><span class="o">=</span><span class="mi">150</span><span class="p">):</span>
+
+    <span class="n">classLabels</span> <span class="o">=</span> <span class="n">classLabels</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">classLabels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 将标签数据矩阵转置
+</span>
+    
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># 学习率
+</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># 初始化系数矩阵
+</span>
+    <span class="c1"># 开始迭代
+</span>
+    <span class="kn">import</span> <span class="nn">random</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numIter</span><span class="p">):</span>
+
+        <span class="n">randIndex</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">randIndex</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span>
+
+            <span class="n">index</span> <span class="o">=</span> <span class="n">randIndex</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">z</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">dataMatrix</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">*</span><span class="n">weights</span><span class="p">))</span>
+
+            <span class="n">error</span> <span class="o">=</span> <span class="n">classLabels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span>  <span class="c1"># 计算错误量
+</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">error</span> <span class="o">*</span> <span class="n">dataMatrix</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>  <span class="c1"># 更新系数
+</span>
+    <span class="k">return</span> <span class="n">weights</span>
+
+</code></pre></div></div>
+
+<h2 id="示例从疝气病症预测病马的死亡率">示例：从疝气病症预测病马的死亡率</h2>
+
+<h3 id="准备数据处理缺失值">准备数据：处理缺失值</h3>
+
+<p>由于有缺失值时NumPy数组无法进行运算，同时也会影响分类，于是需要对其进行填补。常用的缺失值填补方法有多种，但是这里用0填补。因为根据系数的迭代公式可以知道当系数为0时，该系数将在跌倒过程中保持不变，即不会对前期更新的系数产生负面影响。</p>
+
+<h3 id="测试算法用logistic回归进行分类">测试算法：用Logistic回归进行分类</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">classifyVector</span><span class="p">(</span><span class="n">inX</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">inX</span><span class="o">@</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">prob</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">colicTest</span><span class="p">():</span>
+
+    <span class="c1"># 准备数据
+</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'data/horseColicTest.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+        <span class="n">strTrain</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">strTrain</span><span class="p">):</span>
+
+        <span class="n">strTrain</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+
+    <span class="n">trainingData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">strTrain</span><span class="p">)</span>
+
+    
+
+    <span class="c1"># 训练分类器
+</span>
+    <span class="n">trainSet</span> <span class="o">=</span> <span class="n">trainingData</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 训练数据
+</span>
+    <span class="n">trainLabel</span> <span class="o">=</span> <span class="n">trainingData</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 训练标签
+</span>
+    <span class="n">trainWeights</span> <span class="o">=</span> <span class="n">stocGradAscent1</span><span class="p">(</span><span class="n">trainSet</span><span class="p">,</span> <span class="n">trainLabel</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+    
+
+    <span class="c1"># 测试分类器
+</span>
+    <span class="n">errorCount</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'data/horseColicTraining.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+        <span class="n">testData</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">numTestVec</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">testData</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">testData</span><span class="p">:</span>
+
+        <span class="n">currLine</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">)</span>
+
+        <span class="n">currLine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">currLine</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'float'</span><span class="p">)</span>
+
+        <span class="c1">#print(trainWeights.shape)
+</span>
+        <span class="c1">#print(currLine.shape)
+</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">classifyVector</span><span class="p">(</span><span class="n">currLine</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">trainWeights</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">currLine</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+
+            <span class="n">errorCount</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">errorRate</span> <span class="o">=</span> <span class="n">errorCount</span> <span class="o">/</span> <span class="n">numTestVec</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"the error rate of this test is: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">errorRate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">errorRate</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">multiTest</span><span class="p">():</span>
+
+    <span class="n">numTests</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="n">errorSum</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numTests</span><span class="p">):</span>
+
+        <span class="n">errorSum</span> <span class="o">+=</span> <span class="n">colicTest</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"after </span><span class="si">%</span><span class="s">d iterations the average error rate is: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="p">(</span><span class="n">numTests</span><span class="p">,</span> <span class="n">errorSum</span><span class="o">/</span><span class="n">numTests</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">multiTest</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>the error rate of this test is: 0.314381
+
+the error rate of this test is: 0.334448
+
+the error rate of this test is: 0.371237
+
+the error rate of this test is: 0.327759
+
+the error rate of this test is: 0.314381
+
+the error rate of this test is: 0.317726
+
+the error rate of this test is: 0.374582
+
+the error rate of this test is: 0.364548
+
+the error rate of this test is: 0.311037
+
+the error rate of this test is: 0.324415
+
+after 10 iterations the average error rate is: 0.335452
+</code></pre></div></div>
+
+<p>multiTest函数运行了10次分类函数，计算了错误率的平均值。</p>
+:ET

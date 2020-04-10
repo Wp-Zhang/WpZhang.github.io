@@ -1,0 +1,185 @@
+I"g;<h1 id="requests库">requests库</h1>
+<h3 id="1-get请求">1) GET请求</h3>
+<h5 id="基本操作">基本操作</h5>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">'https://www.baidu.com'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div></div>
+<h5 id="添加参数头信息">添加参数，头信息</h5>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'kw'</span><span class="p">:</span><span class="s">'Python'</span><span class="p">,</span>
+    <span class="s">'page'</span><span class="p">:</span><span class="s">'1'</span>
+<span class="p">}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'user-agent'</span><span class="p">:</span><span class="s">'Mozilla/5.0'</span>
+<span class="p">}</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">'https://www.baidu.com'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">)</span>
+
+<span class="c1">#此时url就被构造为了'https://www.baidu.com/?kw=Python&amp;page=1', 且更改了头信息
+</span></code></pre></div></div>
+
+<pre><code class="language-response.text```">为str类型数据，如果是json格式储存的，可以使用```response.json()```将其转化为字典类型（如在Ajax分析中的应用）
+
+##### 抓取数据
+对于普通的网页源码信息，可以直接使用正则表达式等对```response.text```进行过滤抓取
+
+对于图片、视频等以二进制格式储存的文件，可以使用```response.content```直接提取内容后写入，例：
+
+```python
+import requests
+
+url = 'https://tse3-mm.cn.bing.net/th?id=OIP.ylRuhRHnozVzZh7MP4EUIwHaEo&amp;w=300&amp;h=187&amp;c=7&amp;o=5&amp;pid=1.7'
+
+response = requests.get(url)
+with open('MyImg.jpg', 'wb') as file:
+    file.write(response.content)
+</code></pre>
+<h3 id="2-post请求">2) POST请求</h3>
+<h4 id="基本操作-1">基本操作</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requets</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'name'</span><span class="p">:</span> <span class="s">'Ramond'</span><span class="p">,</span>
+    <span class="s">'age'</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+    <span class="s">'weight'</span><span class="p">:</span> <span class="mi">35</span> 
+<span class="p">}</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">'http://www.personalInfo.com'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">)</span>
+</code></pre></div></div>
+<h4 id="上传文件">上传文件</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'file'</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="s">'upload.dat'</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">'http://www.uploadfile.com'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">files</span> <span class="o">=</span> <span class="n">files</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="3-响应">3) 响应</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>信息</th>
+      <th>代码</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>状态码</td>
+      <td><code class="highlighter-rouge">response.status_code</code></td>
+    </tr>
+    <tr>
+      <td>头信息</td>
+      <td><code class="highlighter-rouge">response.headers</code></td>
+    </tr>
+    <tr>
+      <td>Cookies</td>
+      <td><code class="highlighter-rouge">response.cookies</code></td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td><code class="highlighter-rouge">response.url</code></td>
+    </tr>
+    <tr>
+      <td>请求历史</td>
+      <td><code class="highlighter-rouge">response.history</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="4-cookies">4) Cookies</h3>
+<h4 id="获取cookies">获取Cookies</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">)</span>
+<span class="n">cookies</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">cookies</span>
+</code></pre></div></div>
+<h4 id="使用cookies">使用Cookies</h4>
+<h6 id="方法一在头文件中设置cookie信息">方法一：在头文件中设置Cookie信息</h6>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#使用cookies登录豆瓣
+</span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'user-agent'</span><span class="p">:</span> <span class="s">'Mozilla/5.0'</span><span class="p">,</span>
+    <span class="s">'Cookie'</span><span class="p">:</span> <span class="s">'ll="118318"; bid=BHMEaMiJwCE; _vwo_uuid_v2=DECC5EA8684CB406A84D872F80340BDF6|72a3f16f036e918fe233f47599bf881a; __yadk_uid=saRZoxU38xPpSTuPI6OCW2FQPCdRLRnq; gr_user_id=3d628e0d-cd54-4985-9f06-809b68c0d917; viewed="6021440_6709783"; ps=y;  '</span><span class="p">,</span>
+    <span class="s">'host'</span><span class="p">:</span> <span class="s">'www.douban.com'</span>
+<span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.douban.com'</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">)</span>
+</code></pre></div></div>
+<h6 id="方法二构造requetscookiejar对象">方法二：构造RequetsCookieJar对象</h6>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'user-agent'</span><span class="p">:</span> <span class="s">'Mozilla/5.0'</span><span class="p">,</span>
+    <span class="s">'host'</span><span class="p">:</span> <span class="s">'www.douban.com'</span>
+<span class="p">}</span>
+<span class="n">cookies</span> <span class="o">=</span> <span class="s">'ll="118318"; bid=BHMEaMiJwCE; _vwo_uuid_v2=DECC5EA8684CB406A84D872F80340BDF6|72a3f16f036e918fe233f47599bf881a; __yadk_uid=saRZoxU38xPpSTuPI6OCW2FQPCdRLRnq; gr_user_id=3d628e0d-cd54-4985-9f06-809b68c0d917; viewed="6021440_6709783"; ps=y;  '</span>
+<span class="n">jar</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">RequestsCookieJar</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">single_cookie</span> <span class="ow">in</span> <span class="n">cookies</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">';'</span><span class="p">):</span>
+    <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">single_cookie</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'='</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">jar</span><span class="o">.</span><span class="nb">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">'https://www.douban.com'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">cookies</span> <span class="o">=</span> <span class="n">jar</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="5-会话维持">5) 会话维持</h3>
+
+<p>相当于在不关闭浏览器的情况下打开新标签页，可用于保持post()后的登录状态</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.douban.com'</span><span class="p">)</span>
+<span class="c1">#除了构造Session对象外，与直接操作没有太大区别
+</span></code></pre></div></div>
+
+<h3 id="6-代理设置">6) 代理设置</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'http'</span><span class="p">:</span> <span class="s">'http://1.1.1.1:8888'</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">,</span> <span class="n">proxies</span> <span class="o">=</span> <span class="n">proxies</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="7-超时设置">7) 超时设置</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://www.baidu.com"</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1">#当超时时抛出异常
+</span></code></pre></div></div>
+<p>timeout时间为连接和读取的时间总和，可以分别设置</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>response = requests.get(url, timeout = (1,5,10))
+</code></pre></div></div>
+
+<h3 id="8-身份认证">8) 身份认证</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">'http://www.baidu.com'</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'username'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="9-prepared-request">9) Prepared Request</h3>
+<p>可以将请求进行封装后以对象的形式提交</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span><span class="n">Session</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">'http://www.baidu.com'</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'user-agent'</span><span class="p">:</span><span class="s">'Mozilla/5.0'</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'kw'</span><span class="p">:</span> <span class="s">'keyword'</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s">'POST'</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">prepared</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">prepare_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">prepared</span><span class="p">)</span>
+</code></pre></div></div>
+:ET

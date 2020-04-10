@@ -1,0 +1,150 @@
+I"� <h3 id="一利用urllib爬取网页">一、利用Urllib爬取网页</h3>
+
+<h5 id="1导入对应模块">1.导入对应模块：</h5>
+
+<p>  因为Python 3.*版本中将urllib和urllib2合并为urllib，所以直接</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+</code></pre></div></div>
+
+<h5 id="2使用-urllibrequesturlopenurl打开并爬取一个网页">2.使用 urllib.request.urlopen(url)打开并爬取一个网页</h5>
+
+<p>  这里将百度作为例子</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nb">file</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h5 id="3将对应网页的内容读取出来">3.将对应网页的内容读取出来</h5>
+
+<p>  读取内容的常见方式有3种：</p>
+
+<ol>
+  <li>
+    <p>file.read() 读取文件全部内容，把读取到的内容赋给一个字符串变量；</p>
+  </li>
+  <li>
+    <p>file.readlines() 读取文件全部内容， 把读取到的内容赋给一个列表变量，若要读取全部内容，推荐这种方式；</p>
+  </li>
+  <li>
+    <p>file.readline() 读取文件的一行内容。</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">dataline</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>  这里分别将爬取的网页的全部内容和一行内容分别赋给变量data, dataline</p>
+
+<p>  若想输出爬取到的内容，可以直接使用print() :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">print</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="p">(</span><span class="n">dataline</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h5 id="4保存爬取的网页内容">4.保存爬取的网页内容</h5>
+
+<p> 步骤：a. 爬取一个网站读取出来并赋给一个变量；</p>
+
+<p>           b.以写入的方式打开一个本地文件，使用 .html后缀；</p>
+
+<p>           c.将a中的变量的值写入文件；</p>
+
+<p>           d.关闭文件</p>
+
+<p>request = urllib.request.urlopen(“http://www.baidu.com”)</p>
+
+<p>data = request.read()</p>
+
+<p>file = open(“D:/Python/test.html”, ‘wb’)</p>
+
+<p>file.write(data)</p>
+
+<p>file.close()</p>
+
+<p>此外，还有另一种方法直接写入文件：</p>
+
+<p>filename = urllib.request.urlretrieve(url, filename = “D:/Python/test.html”)</p>
+
+<p>    可以使用用 urllib.request.cleanup()清空使用urlretrieve产生的缓存。</p>
+
+<h5 id="5其他">5.其他</h5>
+
+<p>1). 使用 request.getcode() 可以返回爬取网页的状态码，若为200则爬取正常;</p>
+
+<p>2). 使用 request.geturl()返回爬取网页的url;</p>
+
+<p>3). 一般来说，URL标准中只会允许一部分ASCⅡ字符，若要在其中使用汉字等其他字符，需对url进行编码（这里以淘宝为例）：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s">"http://www.taobao.com"</span><span class="p">)</span>
+
+<span class="s">'http</span><span class="si">%3</span><span class="s">A//www.taobao.com'</span>
+
+</code></pre></div></div>
+
+<p>  相应地，对url进行解码诗可以使用如下操作：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">unquote</span><span class="p">(</span><span class="s">"http</span><span class="si">%3</span><span class="s">A//www.taobao.com"</span><span class="p">)</span>
+
+<span class="s">'http://www.taobao.com'</span>
+
+</code></pre></div></div>
+
+<h5 id="6模拟浏览器">6.模拟浏览器</h5>
+
+<p>  用爬虫直接爬取网页时，request中的header会显示其为爬虫，某些网页为了防止爬虫采集信息会进行反爬虫设置。此时为了成功爬取该网页，需以浏览器的身份进行爬取。因此需要修改Headers属性——将键‘user-agent’的值修改为‘Mozilla/5.0’</p>
+
+<h6 id="方法一使用-build_opner修改报头">方法一： 使用 build_opner()修改报头</h6>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">()</span>
+
+<span class="n">opener</span><span class="o">.</span><span class="n">adddheaders</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span><span class="s">'Mozilla/5.0'</span><span class="p">)</span> <span class="p">]</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h6 id="方法二使用-add_headers添加报头">方法二： 使用 add_headers()添加报头</h6>
+
+<p>首先使用urllib.request.Request(url)创建一个Request对象并赋给request，然后使用add_header()添加对应的报头信息</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.baidu.com"</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0'</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h5 id="7超时设置">7.超时设置</h5>
+
+<p>  有时访问一个网页，其长时间未反应，系统会判断访问超时，我们可以自己设置限制的超时访问时间</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"htttp://www.baidu.com"</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>  其中，timeout的单位为秒。</p>
+
+<p>  例中若向网页发送请求后服务器在30s内未响应，则会引发异常。</p>
+:ET

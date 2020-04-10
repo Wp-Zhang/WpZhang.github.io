@@ -1,0 +1,220 @@
+I"u4<h3 id="一利用urllib爬取网页">一、利用Urllib爬取网页</h3>
+
+<h5 id="8http请求">8.HTTP请求</h5>
+
+<p>  HTTP协议请求主要分为6类：GET，POST，DELETE，PUT， HEAD， OPTIONS</p>
+
+<h6 id="1-get-请求">1). GET 请求</h6>
+
+<p>在淘宝上搜索Python后观察可以发现URL由</p>
+
+<p>‘http://www.taobao.com’</p>
+
+<p>;变为了</p>
+
+<p>‘https://s.taobao.com/search?q=Python&amp;imgfile=&amp;commend=all&amp;ssid=s5-e&amp;search_type=item&amp;sourceId=tb.index&amp;spm=a21bo.2017.201856-taobao-item.1&amp;ie=utf8&amp;initiative_id=tbindexz_20170306’，其中所搜索的‘Pyhton’在‘search?/q=’后。由此推测，如果 URL= ‘htttp://s.taobao.com/search?q=’ + 关键词</p>
+
+<p>那么我们就可以直接爬取我们想要在淘宝上搜索的商品的网页信息。因此可以如下操作：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://s.taobao.com/search?q="</span>
+
+<span class="n">keyword</span> <span class="o">=</span> <span class="s">"Python"</span>
+
+<span class="n">url</span> <span class="o">+=</span> <span class="n">keyword</span> 
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"D:/Pyhton/2.html"</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
+
+<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>这样就保存了淘宝搜索关键词为“Python”的网页信息。</p>
+
+<p>如果搜索关键词含中文或其他一些特殊字符，应先将关键词编码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://s.taobao.com/search?q="</span>
+
+<span class="n">keyword</span> <span class="o">=</span> <span class="s">"Python爬虫"</span>
+
+<span class="n">keyword_code</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+
+<span class="n">url</span> <span class="o">+=</span> <span class="n">keyword_code</span>
+
+</code></pre></div></div>
+
+<h6 id="2post请求">2).POST请求</h6>
+
+<p>  实现思路：</p>
+
+<ol>
+  <li>
+    <p>设置URL网址；</p>
+  </li>
+  <li>
+    <p>构建表单数据，使用urllib.parse.urlencode对数据进行编码；</p>
+  </li>
+  <li>
+    <p>创建Request对象，参数含URL、要传递的数据；</p>
+  </li>
+  <li>
+    <p>使用urllib.request.urlopen()打开Request对象；</p>
+  </li>
+  <li>
+    <p>后续处理。</p>
+  </li>
+</ol>
+
+<p><strong>重点：构建表单数据并对其编码：</strong></p>
+
+<p>  查看网页源代码，找到对应的form表单部分，找到输入框属性值，将其包含于构造的数据中，格式为字典，属性值在字典中对应的值为要传递的值。此处用“http://www.iqianyue.com/mypost/”作为例子，构建表单部分如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.iqianyue.com/mypost/"</span>
+
+<span class="n">postdata</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span>
+
+<span class="s">"name"</span><span class="p">:</span><span class="s">"12345678@163.com"</span><span class="p">,</span>
+
+<span class="s">"password"</span><span class="p">:</span><span class="s">"Aa12345"</span>
+
+<span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="c1">#将数据处理后设置为utf-8编码
+</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">postdata</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>完整代码如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.iqianyue.com/mypost/"</span>
+
+<span class="n">postdata</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span>
+
+<span class="s">"name"</span><span class="p">:</span><span class="s">"123456@163.com"</span><span class="p">,</span>
+
+<span class="s">"password"</span><span class="p">:</span><span class="s">"Aa12345"</span>
+
+<span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">postdata</span><span class="p">)</span>
+
+<span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0'</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"D:/3.html"</span><span class="p">,</span><span class="s">'wb'</span><span class="p">)</span>
+
+<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h5 id="9设置代理服务器">9.设置代理服务器</h5>
+
+<ol>
+  <li>
+    <p>使用  urllib.request.ProxyHandler({‘http’:Proxy_addr})  设置代理服务器信息，其中Proxy_addr为“网址：端口号”；</p>
+  </li>
+  <li>
+    <p>创建一个opener对象，以代理服务器信息和urllib.request.HTTPHandler为参数 ；</p>
+  </li>
+  <li>
+    <p>创建全局默认的opener对象；</p>
+  </li>
+  <li>
+    <p>后续操作；</p>
+  </li>
+</ol>
+
+<p>代码如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+
+
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s">'http'</span><span class="p">:</span><span class="s">'116.55.77.81:61201'</span><span class="p">})</span>  <span class="c1">#a
+</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPHandler</span><span class="p">)</span>  <span class="c1">#b
+</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span> <span class="n">opener</span><span class="p">)</span>  <span class="c1">#c
+</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>  <span class="c1">#d
+</span>
+</code></pre></div></div>
+
+<h5 id="10urlerror">10.URLError</h5>
+
+<p>这里主要使用两个类：URLError类 及其子类 HTTPError类</p>
+
+<p>使用代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+<span class="kn">import</span> <span class="nn">urllib.error</span>
+
+
+
+<span class="k">try</span><span class="p">:</span>
+
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>产生URLError的可能有：</p>
+
+<p>  a.连不上服务器；</p>
+
+<p>  b.远程URL不存在;</p>
+
+<p>  c.无网络；</p>
+
+<p>  d.触发 HTTPError</p>
+
+<p>  若产生 HTTPError 可用 HTTPError 替换 except 中的 URLError，但是要提前进行判断错误类型。若触发前三种错误时使用 except urllib.error.HTTPError as e 将会产生错误，原因是无法打印 e.reason。因此可以将代码写成：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+<span class="kn">import</span> <span class="nn">urllib.error</span>
+
+
+
+<span class="k">try</span><span class="p">:</span>
+
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> <span class="c1">#先用子类处理，若无法处理再使用父类处理
+</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+
+<span class="err">（状态码及含义见《精通</span><span class="n">Python</span><span class="err">网络爬虫》</span><span class="n">P48</span><span class="err">）</span>
+
+</code></pre></div></div>
+:ET

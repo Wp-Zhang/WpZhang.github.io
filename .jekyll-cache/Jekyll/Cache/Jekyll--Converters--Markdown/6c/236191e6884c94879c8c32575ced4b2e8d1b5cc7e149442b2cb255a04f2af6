@@ -1,0 +1,256 @@
+I"6D<h3 id="题目对给定的某序列给出方案求-子序列和-最大的子序列并进行评价">题目：对给定的某序列，给出方案求 <em>子序列和</em> 最大的子序列并进行评价</h3>
+
+<hr />
+
+<p>一共有四种方法：</p>
+
+<ol>
+  <li>
+    <p>求出以每一个元素为起点的每一个子序列的和，再进行比较，找出其中的最大值；</p>
+  </li>
+  <li>
+    <p>求出以每一个元素为起点的最大子序列的和，再进行比较，找出其中的最大值；</p>
+  </li>
+  <li>
+    <p>采用分治法，利用递归进行求解；</p>
+  </li>
+  <li>
+    <p>利用动态规划，遍历序列，实时更新最大子序列和。</p>
+
+    <p>方法一时间复杂度为O(N^3)，方法二时间复杂度为O(N^2)，方法三时间复杂度为O(N·logN)，方法四时间复杂度为O(N)。</p>
+  </li>
+</ol>
+
+<p>方法一和方法二只是用多个for循环嵌套，比较简单就不写出来了，这里主要讲方法三和方法四。</p>
+
+<h4 id="递归求解">递归求解</h4>
+
+<p>       主要思路为将序列从中间分开，分别求：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>分割点向左的最大连续序列和
+
+分割点向右的最大连续序列和
+
+横跨分割点的最大连续序列和
+</code></pre></div></div>
+
+<p>       递归计算直到序列长度为1，此时若这个数不是负数，最大子序列和就是其本身，<strong>否则为0</strong>。</p>
+
+<p>Python代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">recursion</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">:</span>   <span class="c1"># 当序列长度为1时
+</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">left</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+
+
+
+    <span class="n">center</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>    <span class="c1"># 分割点
+</span>
+
+
+    <span class="n">maxLeft</span> <span class="o">=</span> <span class="n">recursion</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">center</span><span class="p">)</span>    <span class="c1"># 计算左半部分最大子序列和
+</span>
+    <span class="n">maxRight</span> <span class="o">=</span> <span class="n">recursion</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">center</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>    <span class="c1"># 计算右半部分最大子序列和
+</span>
+
+
+    <span class="c1"># 计算横跨分割点的最大子序列和
+</span>
+    <span class="n">maxCross</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">center</span><span class="p">]</span>
+
+    <span class="n">leftIndex</span> <span class="o">=</span> <span class="n">center</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="n">rightIndex</span> <span class="o">=</span> <span class="n">center</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="k">while</span> <span class="n">leftIndex</span> <span class="o">&gt;=</span> <span class="n">left</span> <span class="ow">and</span> <span class="n">l</span><span class="p">[</span><span class="n">leftIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">maxCross</span> <span class="o">+=</span> <span class="n">l</span><span class="p">[</span><span class="n">leftIndex</span><span class="p">]</span>
+
+        <span class="n">leftIndex</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">while</span> <span class="n">rightIndex</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="ow">and</span> <span class="n">l</span><span class="p">[</span><span class="n">rightIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">maxCross</span> <span class="o">+=</span> <span class="n">l</span><span class="p">[</span><span class="n">rightIndex</span><span class="p">]</span>
+
+        <span class="n">rightIndex</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+
+    <span class="c1"># 返回三者中的最大值
+</span>
+    <span class="n">maxSum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">maxLeft</span><span class="p">,</span> <span class="n">maxCross</span><span class="p">,</span> <span class="n">maxRight</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">maxSum</span>
+
+</code></pre></div></div>
+
+<p>C++代码：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include &lt;iostream&gt;
+</span>
+
+
+<span class="kt">int</span> <span class="nf">max</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">){</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">){</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">c</span><span class="p">)</span> <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+
+		<span class="k">else</span> <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
+
+	<span class="p">}</span>
+
+	<span class="k">else</span><span class="p">{</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+
+		<span class="k">else</span> <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
+
+	<span class="p">}</span>
+
+<span class="p">}</span>
+
+
+
+<span class="kt">int</span> <span class="nf">recursion</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">){</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="k">return</span> <span class="n">l</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span> <span class="o">?</span> <span class="n">l</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+
+	
+
+	<span class="kt">int</span> <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+
+	<span class="kt">int</span> <span class="n">maxLeft</span> <span class="o">=</span> <span class="n">recursion</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">center</span><span class="p">);</span>
+
+	<span class="kt">int</span> <span class="n">maxRight</span> <span class="o">=</span> <span class="n">recursion</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">center</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+
+
+
+    <span class="kt">int</span> <span class="n">maxCross</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">center</span><span class="p">];</span>
+
+    <span class="kt">int</span> <span class="n">leftIndex</span> <span class="o">=</span> <span class="n">center</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">rightIndex</span> <span class="o">=</span> <span class="n">center</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">leftIndex</span> <span class="o">&gt;=</span> <span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">l</span><span class="p">[</span><span class="n">leftIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+
+        <span class="n">maxCross</span> <span class="o">+=</span> <span class="n">l</span><span class="p">[</span><span class="n">leftIndex</span><span class="p">];</span>
+
+        <span class="n">leftIndex</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+	<span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">rightIndex</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">l</span><span class="p">[</span><span class="n">rightIndex</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+
+        <span class="n">maxCross</span> <span class="o">+=</span> <span class="n">l</span><span class="p">[</span><span class="n">rightIndex</span><span class="p">];</span>
+
+        <span class="n">rightIndex</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+
+	<span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">maxSum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxLeft</span><span class="p">,</span> <span class="n">maxCross</span><span class="p">,</span> <span class="n">maxRight</span><span class="p">);</span>
+
+    
+
+    <span class="k">return</span> <span class="n">maxSum</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+
+	<span class="kt">int</span> <span class="n">l</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">85</span><span class="p">,</span> <span class="o">-</span><span class="mi">57</span><span class="p">,</span> <span class="o">-</span><span class="mi">43</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="o">-</span><span class="mi">74</span><span class="p">,</span> <span class="o">-</span><span class="mi">81</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">74</span><span class="p">};</span>
+
+	<span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">recursion</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">));</span>
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h4 id="动态规划求解">动态规划求解</h4>
+
+<p>       主要思路为：初始最大子序列和为0，从头开始遍历序列，若当前元素不是负数，则累加当前元素，否则将之前的累加结果与最大子序列和比较，选出较大值作为新的最大子序列和，清空当前累加结果。直到遍历序列结束。</p>
+
+<p>Python代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">dynamicPlanning</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nb">max</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+
+        <span class="n">tmp</span> <span class="o">+=</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">tmp</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">:</span>
+
+            <span class="nb">max</span> <span class="o">=</span> <span class="n">tmp</span>
+
+        <span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="nb">max</span>
+
+</code></pre></div></div>
+
+<p>C++代码：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">#include &lt;iostream&gt;
+</span>
+
+
+<span class="kt">int</span> <span class="nf">dynamicPlanning</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">[]){</span>
+
+	<span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+
+    	<span class="n">tmp</span> <span class="o">+=</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span> <span class="n">max</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="p">}</span>
+
+        
+
+    <span class="k">return</span> <span class="n">max</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+
+	<span class="kt">int</span> <span class="n">l</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">85</span><span class="p">,</span> <span class="o">-</span><span class="mi">57</span><span class="p">,</span> <span class="o">-</span><span class="mi">43</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="o">-</span><span class="mi">74</span><span class="p">,</span> <span class="o">-</span><span class="mi">81</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">74</span><span class="p">};</span>
+
+	<span class="n">printf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span> <span class="n">dynamicPlanning</span><span class="p">(</span><span class="n">l</span><span class="p">));</span>
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h4 id="两种方法直观比较">两种方法直观比较：</h4>
+
+<p><img src="/media/editor/myplot_20190227175913462393.png" alt="" /></p>
+
+<blockquote>
+  <p>纵坐标为耗时，横坐标为序列长度，序列内元素取值范围为[-100, 100]，类型为整数</p>
+</blockquote>
+:ET

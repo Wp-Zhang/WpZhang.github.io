@@ -1,0 +1,606 @@
+---
+layout:     post
+title:      GBDT算法梳理
+subtitle:   ""
+date:       2019-04-07 12:36:00
+author:     "Wp.Zhang"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - Machine Learning
+    - Data Science
+---
+## 一、前向分布算法
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 对于AdaBoost，可以将其视为一个将多个弱分类器线性组合后对数据进行预测的算法，该模型可以表示为：
+
+
+
+$$
+
+f(x) = \sum_{m=1}^M \beta_mb(s;\gamma_m)\qquad (1)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; $ b(x;\gamma_m)$为基函数（即单个弱分类器），$\gamma_m$为基函数的参数（即弱分类器中特征的权重向量），$\beta_m$为基函数的系数（即弱分类器在线性组合时的权重），$f(x)$就是基函数的线性组合。  
+
+&nbsp; &nbsp; &nbsp; &nbsp; 给定训练数据和损失函数$L(y,f(x))$的条件下，构建最优加法模型$f(x)$的问题等价于损失函数最小化：
+
+
+
+$$
+
+min_{\beta,\gamma}\sum_{i=1}^NL(y_i,\sum_{m=1}^M\beta_mb(x;\gamma_m))\qquad（2）
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 这个公式展现了AdaBoost算法的核心过程。
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 我们可以利用前向分布算法来求解上一个式子的最优参数。前向分布算法的核心是**从前向后，每一步计算一个基函数及其系数，逐步逼近优化目标函数式**，就可以简化优化的复杂度。  
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; M-1个基函数的加法模型为：
+
+
+
+$$
+
+f_{M-1}(x)=\sum_{m=1}^{M-1}\beta_mb(x;\gamma_m)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; M个基函数的加法模型：
+
+
+
+$$
+
+f_{M}(x)=\sum_{m=1}^{M}\beta_mb(x;\gamma_m)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 由上面两式得：
+
+
+
+$$
+
+f_M(x) = f_{M-1}(x)+\beta_Mb(x;\gamma_M)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 由这个公式和公式(2)得极小化损失函数:
+
+
+
+$$
+
+(\beta_m,\gamma_m) = argmin_{\beta,\gamma}\sum_{i=1}^NL(y_i,f_{M-1}(x)+\beta_Mb(x;\gamma_M))
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; **算法思路如下：**
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 1. 初始化$f(x)=0$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 2. 对m=1,2,...,M:  
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; a. 极小化损失函数：$(\beta_m,\gamma_m) = argmin_{\beta,\gamma}\sum_{i=1}^NL(y_i,f_{M-1}(x)+\beta_Mb(x;\gamma_M))$  得到参数$\beta_m,\gamma_m$  
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; b. 更新：$f_m(x) = f_{m-1}(x) + \beta_mb(x;\gamma_m)$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 3. 得到加法模型：$f(x) = f_M(x) = \sum_{m=1}^M\beta_mb(x;\gamma_m)$  
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 这样，前向分布算法将同时求解从m=1到M所有参数$\beta_m,\gamma_m$的优化问题化简为逐次求解各个$\beta_m,\gamma_m$的优化问题。
+
+
+
+## 二、负梯度拟合
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; Freidman提出了梯度提升算法，算法的核心是利用损失函数的负梯度将当前模型的值作为回归问题提升树算法中的残差的近似值，去拟合一个回归树。  
+
+&nbsp; &nbsp; &nbsp; &nbsp; GBDT的思想就是不断去拟合残差，使残差不断减少。用一个通俗的例子来讲假如有个人30岁，我们首先用20岁去拟合，发现损失有10岁，这时我们用6岁去拟合剩下的损失，发现差距还有4岁，第三轮我们用3岁拟合剩下的差距，差距就只有一岁了。如果我们的迭代轮数还没有完，可以继续迭代下面，每一轮迭代，拟合的岁数误差都会减小。（参考[集成学习之Boosting-gbdt](https://www.jianshu.com/p/3ae113d08244)）GBDT中每次迭代构造的Cart树都是用前一轮的残差拟合的。  
+
+&nbsp; &nbsp; &nbsp; &nbsp; 第t轮第i个样本的损失函数的负梯度表示为：
+
+
+
+$$
+
+r_{ti} = -\left [\frac{\partial L(y_i,f(x_i))}{\partial f(x_i)} \right ]_{f(x)=f_{t-1}(x)}
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 利用$(x_i, r_{ti}) (i=1,2,...,m)$我们可以拟合一颗CART回归树，得到了第t颗回归树，其对应的叶节点区域$R_{tj}, j=1,2,...,J$其中J为叶子节点个数。  
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 针对每一个叶子节点里的样本，我们求出使损失函数最小的 输出值$c_{tj}$:
+
+
+
+$$
+
+c_{tj} = argmin_c\sum_{x_i\in R_{tj}}L(y_i,f_{t-1}(x_i)+c)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 这样我们就得到了本轮的决策树拟合函数：
+
+
+
+$$
+
+h_t(x)=\sum_{j=1}^Jc_{tj}I\quad(x \in R_{tj})
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 从而本轮最终得到的强学习器的表达式如下：
+
+
+
+
+
+
+
+$$
+
+f_t(x)=f_{t-1}(x)+\sum_{j=1}^Jc_{tj}I\quad(x \in R_{tj})
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 通过损失函数的负梯度来拟合，是一种通用的拟合损失误差的办法。无论是分类问题还是回归问题，我们都可以通过其损失函数的负梯度的拟合，从而用GBDT来解决我们的分类和回归问题。区别仅仅在于损失函数不同导致的负梯度不同而已。
+
+
+
+## 三、损失函数
+
+
+
+1. 对于分类算法，其损失函数一般有两种：  
+
+
+
+    a. 指数损失函数：$L(y, h(x)) = exp(-yh(x))$  
+
+
+
+    b. 对数损失函数：分为二元分类和多元分类两种。
+
+   - 对于二元分类：$L(y,h(x)) = log(1 + exp(-yh(x)))$  
+
+   - 对于多元分类：设类别数为k $L(y_k, h(x)) = - \sum_{k=1}^Ky_K\log (p_k(x))$，$y_k$为样本数据估计值，当一个样本x属于k时，$y_k=1$，否则$y_k=0$  
+
+2. 对于回归算法，常用损失函数有4种：  
+
+
+
+    a. 均方差：$L(y,h(x)) = (y0h(x))^2$  
+
+
+
+    b. 绝对损失：$L(y, h(x)) = \left | y-h(x) \right |$  
+
+
+
+    c. Huber损失：它是均方差和绝对损失的折衷产物，对于远离中心的异常点，采用绝对损失，而中心附近的点采用均方差。这个界限一般用分位数点度量 
+
+
+
+$$L(y,f(x)) = \left\{\begin{matrix}
+
+\frac{1}{2}(y-f(x))^2 & |y-f(x)|\leq \delta \\
+
+\delta \left( |y-f(x)|-\frac{\delta}{2} \right) & |y-f(x)| > \delta
+
+\end{matrix}\right.$$
+
+    d. 分位数损失：它对应的是分位数回归的损失函数。
+
+
+
+$$
+
+L(y,f(x)) = \sum_{y\geq f(x)}\theta|y-f(x)| + \sum_{y<f(x)}(1-\theta)|y-f(x)|
+
+$$
+
+
+
+## 四、回归
+
+
+
+**输入：**训练样本  
+
+**迭代次数（基学习器数量）：**T  
+
+**损失函数：**L  
+
+**输出：**强学习器H(x)  
+
+
+
+***算法流程***
+
+
+
+1. 初始化基学习器
+
+
+
+$$
+
+h_0(x) = argmin_c\sum_{i=1}^mL(y_i, c)
+
+$$
+
+
+
+2. 迭代（t = 1,2,...,T）  
+
+
+
+    a. 计算第t次迭代的负梯度
+
+$$
+
+T_{ti} = -\frac{\partial L(y_i, h_{t-1}(x_i))}{\partial h_{t-1}(x_i)}, i=1,2,..., m  
+
+$$
+
+b. 利用$(x_i, r_{ti})(i=1,2,...,m)$拟合第t棵CART回归树，其对应的叶子节点区域为$R_{tj}, j=1,2,...,J$其中J为回归树的叶子节点的个数  
+
+
+
+    c. 对叶子节点区域$j=1,2,...,J$，计算最佳拟合值
+
+$$
+
+c_{tj} = argmin_c\sum_{c_{xi}\epsilon R_{tj}}L(y_i, h_{t-1}(x_i)+c)
+
+$$
+
+    d. 更新强学习器
+
+$$
+
+h_i(x) = h_{i-1}(x)+\sum_{j=1}^Jc_{tj}I(x\epsilon R_{tj})
+
+$$
+
+3. 得到最强学习器
+
+
+
+$$
+
+H(x) = h_0(x) + \sum_{t=1}^T\sum_{j=1}^Jc_{tj}I(x\epsilon R_{tj})
+
+$$
+
+
+
+## 五、分类
+
+
+
+### 1. 二分类
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 对于二元GBDT，其对数损失函数在之前已经给出：
+
+
+
+$$
+
+L(y,h(x)) = log(1 + exp(-yh(x)))
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 其中 $y\in -1,+1$ 此时的负梯度误差为：
+
+
+
+$$
+
+r_{ti}=-\left [\frac{\partial L(y,f(x_i))}{\partial f(x_i)} \right]_{f(x)=f_{t-1}(x)} = \frac{y_i}{1+exp(y_if(x_i))}
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 对于生成的决策树，各个叶子节点的最佳负梯度拟合值为：
+
+
+
+$$
+
+c_{tj} = argmin_c \sum_{x_i \in R_{tj}} \log(1+exp(-y_i(f_{t-1}(x_i)+c)))
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 由于这个式子不易优化，一般使用近似值代替：
+
+
+
+$$
+
+c_{tj} = \frac{\sum_{x_i\in R_{tj}}r_{tj}}{\sum_{x_i\in R_{tj}}|r_{tj}|(1-|r_{tj}|)}
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; **除了负梯度计算和叶子节点的最佳负梯度拟合的线性搜索，二分类GBDT与GBDT回归算法过程相同。**
+
+
+
+### 2. 多分类
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 多分类GBDT的损失函数在之前也已经给出过：
+
+
+
+$$
+
+设类别数为k, \quad L(y_k, h(x)) = - \sum_{k=1}^Ky_k\log (p_k(x))
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 样本属于第k类的概率$p_k(x)$的表达式为：
+
+
+
+$$
+
+p_k(x) = \frac{exp(f_k(x))}{\sum_{i=1}^K exp(f_i(x))}
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 结合上面两个式子可以求出第t轮第i个样本对应类别 *l* 的负梯度误差为：
+
+
+
+$$
+
+r_{til} = -\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)} \right]_{f_k(x) = f_{l, t-1}(x)} = y_{il} - p_{l, t-1}(x_i)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; **可以看出，其实这里的误差就是样本i对应类别l的真实概率和t-1轮预测概率的差值。**
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 对于生成的决策树，各个叶子节点的最佳负梯度拟合值为：
+
+
+
+$$
+
+c_{tjl} = argmin_{c_{jl}}\sum_{i=0}^m \sum_{k=1}^K L(y_k,\;\;f_{t-1,l}(x)+\sum_{j=0}^J c_{jl}I) \quad x_i\in R_{tj}
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 由于上式比较难优化，一般用近似值代替：
+
+
+
+$$
+
+c_{tjl} = \frac{K-1}{K} \cdot \frac{\sum_{x_i\in R_{tjl}}r_{til}}{\sum_{x_i\in R_{til}}|r_{til}|(1-|r_{til}|)}
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; **除了负梯度计算和叶子节点的最佳负梯度拟合的线性搜索，多分类GBDT与二分类GBDT以及GBDT回归算法过程相同。**
+
+
+
+
+
+
+
+## 六、正则化
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 为了防止GBDT过拟合，需要对其进行正则化。主要有三种方式：
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 1. 给每棵树的输出结果乘上一个步长(学习率) a 。之前的弱学习器的迭代式改为：
+
+
+
+$$
+
+f_M(x) = f_{M-1}(x)+{\color{red}a}\,\cdot\,\beta_Mb(x;\gamma_M)
+
+$$
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 2. 通过子采样比例进行正则化。GBDT每一轮建树时样本从原始训练集中采用无放回随机抽样的方式产生。若采样比例取1，则采用全部样本进行训练。为了防止过拟合，同时又要防止样本拟合偏差较大(欠拟合)，要合理取值，常用**\[0.5, 0.8\]**
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 3. 对弱学习器(CART)进行正则化剪枝：控制树的最大深度、节点最少样本数、最大叶子节点数、节点分支的最小样本数等。
+
+
+
+
+
+
+
+## 七、优缺点
+
+
+
+**优点**：
+
+
+
+1. 可以灵活处理各种类型的数据，包括连续值和离散值
+
+
+
+2. 相对于SVM来说，较少的调参可以达到较好的预测效果
+
+
+
+3. 使用健壮的损失函数时，模型鲁棒性非常强，受异常值影响小
+
+
+
+**缺点**:
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; 由于弱学习器之间存在依赖关系，难以并行训练数据
+
+
+
+
+
+
+
+## 八、sklearn参数
+
+
+
+**boosting框架相关参数**：
+
+
+
+- **n_estimators**：弱学习器最大迭代次数/弱学习器个数
+
+
+
+- **learning_rate**：每个弱学习器的权重缩减步长（正则化时的a）
+
+
+
+- **subsample**：子采样比例
+
+
+
+- **init**：初始化时的弱学习器，默认用训练集样本来做样本集的初始化分类回归预测
+
+
+
+- **loss**：损失函数
+
+
+
+  - 分类模型：对数似然损失函数**deviance**，指数损失函数**exponential**
+
+
+
+  - 回归模型：均方差**ls**，绝对损失**lad**，Huber损失**huber**，分位数损失**quantile**
+
+
+
+- **alpha**：只有回归模型有，当使用Huber损失和分位数损失时指定的分位数的值
+
+
+
+
+
+
+
+**弱学习器参数**：
+
+
+
+- **max_features**：划分时考虑的最大特征数
+
+
+
+- **max_depth**：决策树最大深度
+
+
+
+- **min_samples_split**：内部节点划分所需最小样本数
+
+
+
+- **min_samples_leaf**：叶子节点最少样本数
+
+
+
+- **min_weight_fraction_leaf**：叶子节点最小样本权重，若小于改值则该节点会和兄弟节点一起被剪枝
+
+
+
+- **max_leaf_nodes**：最大叶子节点数
+
+
+
+- **min_impurity_split**：节点划分最小不纯度
+
+
+
+  
+
+
+
+## 九、应用场景
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; GBDT的适用面非常广，几乎可以用于所有回归问题（线性/非线性），也可以用于分类问题。

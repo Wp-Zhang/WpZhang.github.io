@@ -1,0 +1,175 @@
+I"�$<h3 id="数据库配置">数据库配置</h3>
+
+<h6 id="settingspy">settings.py</h6>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="c1">#第一个数据库
+</span>
+    <span class="s">'default'</span><span class="p">:</span> <span class="p">{</span>
+
+        <span class="s">'ENGINE'</span><span class="p">:</span> <span class="s">'django.db.backends.mysql'</span><span class="p">,</span>
+
+        <span class="s">'NAME'</span><span class="p">:</span> <span class="s">'blog'</span><span class="p">,</span>
+
+        <span class="s">'USER'</span><span class="p">:</span> <span class="s">'root'</span><span class="p">,</span>
+
+        <span class="s">'PASSWORD'</span><span class="p">:</span> <span class="s">'Zwp0816...'</span><span class="p">,</span>
+
+        <span class="s">'HOST'</span><span class="p">:</span> <span class="s">'127.0.0.1'</span><span class="p">,</span>
+
+        <span class="s">'PORT'</span><span class="p">:</span> <span class="s">'3306'</span><span class="p">,</span>
+
+    <span class="p">},</span>
+
+    
+
+    <span class="c1">#第二个数据库
+</span>
+    <span class="s">'MyDjango'</span><span class="p">:</span> <span class="p">{</span>
+
+        <span class="s">'ENGINE'</span><span class="p">:</span> <span class="s">'django.db.backends.sqlite3'</span><span class="p">,</span>
+
+        <span class="s">'NAME'</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'sqlite3'</span><span class="p">),</span>
+
+    <span class="p">},</span>
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h3 id="数据模型创建">数据模型创建</h3>
+
+<p>Django的数据模型以类包装，具体格式为：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+
+<span class="c1">#class 模型类名称(models.Model)
+</span>
+<span class="k">class</span> <span class="nc">ModelName</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+
+    
+
+    <span class="c1">#数据模型 = 数据类型
+</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">created_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">update_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+    <span class="n">is_showed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h6 id="indexmodelspy">index/models.py</h6>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+
+<span class="c1"># Create your models here.
+</span>
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s">"标题"</span><span class="p">,</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s">"作者"</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">created_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s">"创建日期"</span><span class="p">,</span> <span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">update_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s">"修改日期"</span><span class="p">,</span> <span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="s">"内容"</span><span class="p">)</span>
+
+    <span class="n">is_showed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s">"私密设置"</span><span class="p">)</span>
+
+
+
+    <span class="c1">#定义数据库中存储数据模型的表名称
+</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s">"article"</span>
+
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+</code></pre></div></div>
+
+<h3 id="激活模型">激活模型</h3>
+
+<ol>
+  <li>
+    <p>在 settings.py 中的INSTALLED_APPS列表中添加app</p>
+  </li>
+  <li>
+    <p>运行命令</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="n">index</span>
+
+</code></pre></div></div>
+
+<p>其中index是app名称</p>
+
+<ol>
+  <li>运行命令</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+
+</code></pre></div></div>
+
+<h3 id="注册模型">注册模型</h3>
+
+<p>为了便于管理数据模型，需要将数据注册到admin中。</p>
+
+<p>如果没有创建admin账户，首先在终端运行指令：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+
+</code></pre></div></div>
+
+<p>然后根据提示输入相关信息即可创建一个超级用户</p>
+
+<p>创建完成后进入app目录下的 admin.py</p>
+
+<ol>
+  <li>导入想要注册的数据模型</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+</code></pre></div></div>
+
+<ol>
+  <li>进行注册操作</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>至此注册完成，可以在后台对该数据模型进行管理</p>
+
+<p><img src="/img/in-post/old/20181109125018773_20190219134334745039.png" alt="" /></p>
+:ET

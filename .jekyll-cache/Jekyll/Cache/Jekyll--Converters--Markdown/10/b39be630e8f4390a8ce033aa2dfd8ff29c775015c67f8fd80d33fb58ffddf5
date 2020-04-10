@@ -1,0 +1,186 @@
+I"
+/<h2 id="1xpath">1）XPath</h2>
+
+<h6 id="xpath通过标签提取信息更适用于爬虫">XPath通过标签(<tag></tag>)提取信息→更适用于爬虫</h6>
+
+<h3 id="a构造解析对象">a.构造解析对象</h3>
+
+<h5 id="方法一处理文本">方法一：处理文本</h5>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s">'''
+&lt;ol class="carousel-indicators"&gt;
+	&lt;li data-target="#myCarousel" data-slide-to="0" class="active"&gt;&lt;/li&gt;
+	&lt;li data-target="#myCarousel" data-slide-to="1" class=""&gt;&lt;/li&gt;
+	&lt;li data-target="#myCarousel" data-slide-to="2" class=""&gt;&lt;/li&gt;
+	&lt;li data-target="#myCarousel" data-slide-to="3" class=""&gt;&lt;/li&gt;
+	&lt;li data-target="#myCarousel" data-slide-to="4" class=""&gt;&lt;/li&gt;
+	&lt;/ol&gt;
+'''</span>
+
+<span class="n">html</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div></div>
+<p>如果想输出HTML的文本内容，可以使用  <code class="highlighter-rouge">result = etree.tostring(html).decode('utf-8')</code>由于tostring()返回的对象为bytes类型，所以这里使用decode(‘utf-8’)进行解码</p>
+
+<h5 id="方法二处理文件">方法二：处理文件</h5>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">'./test.html'</span><span class="p">,</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTMLParser</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="b提取信息">b.提取信息</h3>
+
+<h4 id="常用规则">常用规则</h4>
+<p>/ : 选取当前节点的直接子节点</p>
+
+<p>text()：定位标签内容       例：
+<code class="highlighter-rouge">html/a/b/text()</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">abc</span><span class="o">&lt;/</span><span class="n">b</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+<span class="err">结果：</span><span class="n">abc</span>
+</code></pre></div></div>
+<p>@选择标签属性：标签[@属性=属性值]</p>
+
+<p>//选取当前节点的所有子孙节点:<code class="highlighter-rouge">//li@[class='hidden-xs']/a/@href</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">li</span> <span class="n">class</span><span class="o">=</span><span class="s">''</span><span class="n">hidden</span><span class="o">-</span><span class="n">xs</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">"www.baidu,com"</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+
+<span class="err">结果：</span><span class="n">www</span><span class="o">.</span><span class="n">baidu</span><span class="o">.</span><span class="n">com</span>
+</code></pre></div></div>
+<p>contains(attr, value)：属性多值匹配，attr为属性名，value为属性值，只要value在attr中即可匹配成功</p>
+
+<p>按序选择：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">//</span><span class="n">li</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>             <span class="c1">#选取第一个节点，这里的序号是从1开始
+</span><span class="o">//</span><span class="n">li</span><span class="p">[</span><span class="n">last</span><span class="p">()]</span>        <span class="c1">#选取最后一个节点
+</span><span class="o">//</span><span class="n">li</span><span class="p">[</span><span class="n">position</span><span class="p">()</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">]</span>  <span class="c1">#选取前三个节点
+</span><span class="o">//</span><span class="n">li</span><span class="p">[</span><span class="n">last</span><span class="p">()</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>      <span class="c1">#选取倒数第四个节点
+</span></code></pre></div></div>
+
+<h4 id="提取">提取</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">'./test.html'</span><span class="p">,</span> <span class="n">etree</span><span class="o">.</span><span class="n">HTMLParser</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//li[@name='</span><span class="n">show</span><span class="s">' and contains(@class, '</span><span class="n">li</span><span class="s">')]'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="2-beautiful-soup">2) Beautiful Soup</h2>
+<h3 id="a-基本操作">a) 基本操作</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'</span><span class="err">
+</span><span class="s">    &lt;ol class="carousel-indicators"&gt;</span><span class="err">
+</span><span class="s">    	&lt;li data-target="#myCarousel" data-slide-to="0" class="active"&gt;&lt;/li&gt;</span><span class="err">
+</span><span class="s">    	&lt;li data-target="#myCarousel" data-slide-to="1" class=""&gt;&lt;/li&gt;</span><span class="err">
+</span><span class="s">    	&lt;li data-target="#myCarousel" data-slide-to="2" class=""&gt;&lt;/li&gt;</span><span class="err">
+</span><span class="s">    	&lt;li data-target="#myCarousel" data-slide-to="3" class=""&gt;&lt;/li&gt;</span><span class="err">
+</span><span class="s">    	&lt;li data-target="#myCarousel" data-slide-to="4" class=""&gt;&lt;/li&gt;</span><span class="err">
+</span><span class="s">    	&lt;/ol&gt;</span><span class="err">
+</span><span class="s">'</span>
+
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>这样就构造了一个BeautifulSoup对象，在初始化BeautifulSoup对象时会自动更正字符串内的HTML格式</p>
+
+<p>使用    <code class="highlighter-rouge">soup.prettify()</code>  可以将要解析的字符串以标准缩进的格式输出</p>
+
+<h3 id="b-节点选择">b) 节点选择</h3>
+<p>假设soup为一个已初始化的BeautifulSoup对象</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>代码</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a</code></td>
+      <td>选取名称为a的节点</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.string</code></td>
+      <td>选取节点a的内容</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.name</code></td>
+      <td>选取节点a的名称</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a['name'] / soup.a.attrs['name']</code></td>
+      <td>选取节点a的name属性的值，返回str类型</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a['class']</code></td>
+      <td>选取节点a的class属性的值，返回list类型</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.contents</code></td>
+      <td>选取节点a的内容及直接子节点</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.childrem</code></td>
+      <td>同上</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.descendants</code></td>
+      <td>选取节点a的所有子孙节点</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.parent</code></td>
+      <td>选取节点a的父节点</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.parents</code></td>
+      <td>选取节点a的祖先节点，返回生成器类型</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.next_sibling</code></td>
+      <td>选取节点a的下一个同级节点</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.previous_sibling</code></td>
+      <td>选取节点a的上一个同级节点</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.next_siblings</code></td>
+      <td>选取节点a之后的同级节点，返回生成器类型</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">soup.a.previous_siblings</code></td>
+      <td>选取节点a之前的同级节点， 返回生成器类型</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>所有返回类型为生成器的选择结果可以使用遍历来获取其中内容：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">soup</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">descendants</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span>
+</code></pre></div></div>
+<p>这样就将索引和内容同时输出</p>
+
+<h3 id="c-方法选择器">c) 方法选择器</h3>
+<h4 id="find_all">find_all()</h4>
+
+<p><code class="highlighter-rouge">find_all(name='li')</code>:选取节点名称为li的节点</p>
+
+<p><code class="highlighter-rouge">find_all(attrs={'id':'a'})</code>:选取’id’属性的值为’a’的节点，attrs的参数必须是字典类型</p>
+
+<p><code class="highlighter-rouge">find_all(text=re.compile('abc'))</code>:选取匹配正则表达式的节点文本组成的列表</p>
+
+<h4 id="find">find()</h4>
+<p>选取符合选取规则的第一个节点</p>
+<h4 id="find_parents">find_parents()</h4>
+<p>选取所有祖先节点</p>
+<h4 id="find_parent">find_parent()</h4>
+<p>选取直接父节点</p>
+<h4 id="find_next_siblings-find_next_sibling">find_next_siblings(), find_next_sibling()</h4>
+<h4 id="find_previous_siblings-find_previous_sibling">find_previous_siblings(), find_previous_sibling()</h4>
+<h4 id="find_all_next-find_next">find_all_next(), find_next()</h4>
+<h4 id="find_all_previous-find_previous">find_all_previous(), find_previous()</h4>
+:ET

@@ -1,0 +1,510 @@
+I"��<h2 id="k-近邻算法基本实现">k-近邻算法基本实现</h2>
+
+<h3 id="通用函数">通用函数</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="kn">import</span> <span class="nn">operator</span>
+
+
+
+<span class="k">def</span> <span class="nf">createDataSet</span><span class="p">():</span>
+
+    <span class="s">"""
+
+    创建数据集
+
+    """</span>
+
+    <span class="n">group</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'float'</span><span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s">'A'</span><span class="p">,</span><span class="s">'A'</span><span class="p">,</span><span class="s">'B'</span><span class="p">,</span><span class="s">'B'</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">group</span><span class="p">,</span> <span class="n">labels</span>
+
+</code></pre></div></div>
+
+<p>测试</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">group</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">createDataSet</span><span class="p">()</span>
+
+<span class="n">group</span>
+
+<span class="n">labels</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1. , 1.1],
+
+       [1. , 1. ],
+
+       [0. , 0. ],
+
+       [0. , 0.1]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+['A', 'A', 'B', 'B']
+</code></pre></div></div>
+
+<p>该函数产生4个点，点的类别分别为A,A,B,B</p>
+
+<h3 id="算法实现">算法实现</h3>
+
+<ul>
+  <li>
+    <p>classify0()函数的四个参数分别为：用于分类的输入向量input_X，训练样本集dataSet，标签向量labels，选择最近邻居的数目k。显然，labels的元素数目要和dataSet的行数相同（这样每一个样本才有所属的标签）。</p>
+  </li>
+  <li>
+    <p>距离计算使用欧式距离计算公式：<img src="http://latex.codecogs.com/gif.latex?d%20%3D%20%5Csqrt%7B%28xA_%7B0%7D%20-%20xB_%7B0%7D%29%5E%7B2%7D%20&plus;%20%28xA_%7B1%7D%20-%20xB_%7B1%7D%29%5E%7B2%7D%7D" />&lt;/img&gt;，拓展到多维数据距离的计算则公式为：$d&gt;，拓展到多维数据距离的计算则公式为：<img src="http://latex.codecogs.com/gif.latex?%24d%20%3D%20%5Csqrt%7B%5Csum_%7Bi%7D%5E%7Bn%7D%7B%28xA_%7Bi%7D-xB_%7Bi%7D%29%5E%7B2%7D%7D%7D%24" />&lt;/img&gt; 其中n为维度。</p>
+  </li>
+</ul>
+
+<h5 id="算法步骤">算法步骤</h5>
+
+<ol>
+  <li>
+    <p>首先计算所有点之间的距离；</p>
+  </li>
+  <li>
+    <p>将计算结果从小到大依次排序；</p>
+  </li>
+  <li>
+    <p>确定前k个距离最小的元素所在的主要分类；</p>
+  </li>
+  <li>
+    <p>返回出现频率最高的元素标签。</p>
+  </li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">classify0</span> <span class="p">(</span><span class="n">input_X</span><span class="p">,</span> <span class="n">dataSet</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+
+    <span class="n">dataSetSize</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># 数据集列数
+</span>
+    <span class="c1"># 计算距离
+</span>
+    <span class="n">diffMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">input_X</span><span class="p">,</span> <span class="p">(</span><span class="n">dataSetSize</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="n">dataSet</span>
+
+    <span class="c1"># np.tile(input_X, (dataSetSize,1))将点input_X复制 数据集中所有点的个数 次，
+</span>
+    <span class="c1"># 得出的结果减去dataSet后就求得了input_X与数据集中各点的坐标差
+</span>
+    <span class="n">sqDiffMat</span> <span class="o">=</span> <span class="n">diffMat</span><span class="o">**</span><span class="mi">2</span>  <span class="c1"># 平方
+</span>
+    <span class="n">sqDistances</span> <span class="o">=</span> <span class="n">sqDiffMat</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 求和
+</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">sqDistances</span><span class="o">**</span><span class="mf">0.5</span>  <span class="c1"># 开方得出距离
+</span>
+    <span class="n">sortedDistIndicies</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>  <span class="c1"># argsort()将数组从小到大排序，返回每个数在原数组中的索引组成的列表
+</span>
+    
+
+    <span class="c1"># 选择距离最小的k个点
+</span>
+    <span class="n">classCount</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># 用于统计距离input_X最近的k个点的label分布，格式类似于{'A':1, 'B':2}
+</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+
+        <span class="n">voteLabel</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">sortedDistIndicies</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>  <span class="c1"># 获取距离input_X第i近的点的label
+</span>
+        <span class="n">classCount</span><span class="p">[</span><span class="n">voteLabel</span><span class="p">]</span> <span class="o">=</span> <span class="n">classCount</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">voteLabel</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># 该label出现次数+1
+</span>
+    
+
+    <span class="c1"># 排序
+</span>
+    <span class="n">sortedClassCount</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">classCount</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 将label出现次数由大到小排序
+</span>
+    <span class="c1">#sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True) # 原书上的代码
+</span>
+    <span class="k">return</span> <span class="n">sortedClassCount</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># 返回出现次数最多的label
+</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">classify0</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">group</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'B'
+</code></pre></div></div>
+
+<h2 id="利用k-近邻算法改进约会网站配对效果">利用k-近邻算法改进约会网站配对效果</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">'font.sans-serif'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">'SimHei'</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">'axes.unicode_minus'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+</code></pre></div></div>
+
+<h3 id="数据读取">数据读取</h3>
+
+<h4 id="文件格式处理">文件格式处理</h4>
+
+<p>由于原始的数据文件是.txt类型文件，数据之间用’\t’分隔，于是将其读取处理后存为.csv文件便于数据操作</p>
+
+<p>txt2csv函数将.txt文件转化为.csv文件</p>
+
+<p>参数：fileName:文件名（文件路径），columns:数据所对应的列名组成的列表</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">txt2csv</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
+
+    <span class="c1"># 打开文件按行读取
+</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="c1"># 将每一行数据间隔方式由'\t'改为','
+</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\t</span><span class="s">'</span><span class="p">,</span> <span class="s">','</span><span class="p">)</span>
+
+    <span class="c1"># 将列名插入数据头部
+</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="s">','</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span>
+
+    <span class="n">content</span> <span class="o">+=</span> <span class="s">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># 存储修改后的数据为.csv文件
+</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'.'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">'.csv'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">txt2csv</span><span class="p">(</span><span class="s">'data/datingTestSet.txt'</span><span class="p">,</span> <span class="p">[</span><span class="s">'每年获得的飞行常客里程数'</span><span class="p">,</span><span class="s">'玩视频游戏所耗时间百分比'</span><span class="p">,</span><span class="s">'每周消费的冰淇淋公升数'</span><span class="p">,</span><span class="s">'评价'</span><span class="p">])</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'data/datingTestSet.csv'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h4 id="文件读取">文件读取</h4>
+
+<p>读取训练数据文件</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">splitData</span><span class="p">(</span><span class="n">fileName</span><span class="p">):</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">data</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">datingDataMat</span><span class="p">,</span> <span class="n">datingLabels</span> <span class="o">=</span> <span class="n">splitData</span><span class="p">(</span><span class="s">'data/datingTestSet.csv'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'data/datingTestSet.csv'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h3 id="数据分析">数据分析</h3>
+
+<p>分析“玩视频游戏所耗时间百分比”与“每周所消费的冰淇淋公升数”的关系</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">"每年获得的飞行常客里程数"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"每周消费的冰淇淋公升数"</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">"评价"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1e58fe9a400&gt;
+</code></pre></div></div>
+
+<p><img src="/media/editor/output_29_1_20190325181740236162.png" alt="" /></p>
+
+<p>观察各个特征之间的关系</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">"评价"</span><span class="p">,</span> <span class="n">plot_kws</span><span class="o">=</span><span class="p">{</span><span class="s">'alpha'</span><span class="p">:</span><span class="mf">0.3</span><span class="p">})</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;seaborn.axisgrid.PairGrid at 0x1e591194748&gt;
+</code></pre></div></div>
+
+<p><img src="/media/editor/output_31_2_20190325181753333190.png" alt="" /></p>
+
+<h3 id="数据预处理">数据预处理</h3>
+
+<p>由于给出的三列特征取值范围不同，首先将它们的数值归一化</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">autoNorm</span><span class="p">(</span><span class="n">dataSet</span><span class="p">):</span>
+
+    <span class="n">minVals</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="nb">min</span><span class="p">()</span>
+
+    <span class="n">maxVals</span> <span class="o">=</span> <span class="n">dataSet</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">dataSet</span> <span class="o">-</span> <span class="n">minVals</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">maxVals</span> <span class="o">-</span> <span class="n">minVals</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">df</span><span class="p">[</span><span class="s">'每年获得的飞行常客里程数'</span><span class="p">]</span> <span class="o">=</span> <span class="n">autoNorm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'每年获得的飞行常客里程数'</span><span class="p">])</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s">'玩视频游戏所耗时间百分比'</span><span class="p">]</span> <span class="o">=</span> <span class="n">autoNorm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'玩视频游戏所耗时间百分比'</span><span class="p">])</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s">'每周消费的冰淇淋公升数'</span><span class="p">]</span> <span class="o">=</span> <span class="n">autoNorm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'每周消费的冰淇淋公升数'</span><span class="p">])</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h3 id="分类">分类</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">datingLabels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<p>定义一个包含了所有处理步骤的函数作为分类器</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">datingClassTest</span><span class="p">():</span>
+
+    <span class="c1"># 文件处理
+</span>
+    <span class="n">txt2csv</span><span class="p">(</span><span class="s">'data/datingTestSet.txt'</span><span class="p">,</span> <span class="p">[</span><span class="s">'每年获得的飞行常客里程数'</span><span class="p">,</span><span class="s">'玩视频游戏所耗时间百分比'</span><span class="p">,</span><span class="s">'每周消费的冰淇淋公升数'</span><span class="p">,</span><span class="s">'评价'</span><span class="p">])</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'data/datingTestSet.csv'</span><span class="p">)</span>
+
+    <span class="c1"># 数据预处理-归一化
+</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'每年获得的飞行常客里程数'</span><span class="p">]</span> <span class="o">=</span> <span class="n">autoNorm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'每年获得的飞行常客里程数'</span><span class="p">])</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s">'玩视频游戏所耗时间百分比'</span><span class="p">]</span> <span class="o">=</span> <span class="n">autoNorm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'玩视频游戏所耗时间百分比'</span><span class="p">])</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s">'每周消费的冰淇淋公升数'</span><span class="p">]</span> <span class="o">=</span> <span class="n">autoNorm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'每周消费的冰淇淋公升数'</span><span class="p">])</span>
+
+    <span class="c1"># 数据拆分
+</span>
+    <span class="n">datingDataMat</span><span class="p">,</span> <span class="n">datingLabels</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># 测试
+</span>
+    <span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># 测试集比例
+</span>
+    <span class="n">test_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">test_ratio</span><span class="p">)</span>  <span class="c1"># 测试集大小
+</span>
+    <span class="n">error_count</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 分类错误个数统计
+</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">test_length</span><span class="p">):</span>
+
+        <span class="c1"># 这里之前用的是pandas.DataFrame数据类型，而分类函数中用的是numpy.array类型，所以要转化一下
+</span>
+        <span class="n">input_X</span> <span class="o">=</span> <span class="n">datingDataMat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">dataSet</span> <span class="o">=</span> <span class="n">datingDataMat</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_length</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">datingLabels</span><span class="p">[</span><span class="n">test_length</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">classifierResult</span> <span class="o">=</span> <span class="n">classify0</span><span class="p">(</span><span class="n">input_X</span><span class="p">,</span> <span class="n">dataSet</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">"the classifier came back with:</span><span class="si">%</span><span class="s">s, the real answer is:</span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">classifierResult</span><span class="p">,</span> <span class="n">datingLabels</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">classifierResult</span> <span class="o">!=</span> <span class="n">datingLabels</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+
+            <span class="n">error_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"the total error rate is : </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="p">(</span><span class="n">error_count</span><span class="o">/</span><span class="n">test_length</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">datingClassTest</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>可见错误率为0.05，正确率有95%，比较令人满意</p>
+
+<p>如果要根据已有结果进行预测，测调用分类函数，将当前所有的数据作为dataSet参数即可</p>
+
+<h2 id="手写识别系统">手写识别系统</h2>
+
+<h3 id="准备数据">准备数据</h3>
+
+<p>为了便于操作，需要将手写数字的图片都转化为0，1矩阵表示的文本</p>
+
+<p>由于图片已经事先转换完成，于是只写读取txt文本中矩阵到numpy的函数</p>
+
+<p>img2vector函数将读取的txt文件中格式为32*32的0-1矩阵读取到numpy数组中后，将其转化为一个长为1024的数组</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">img2vector</span><span class="p">(</span><span class="n">fileName</span><span class="p">):</span>
+
+    <span class="c1"># 读取文件
+</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span><span class="s">''</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+    <span class="c1"># 处理数据，将字符型转化为整型
+</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">lines</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+
+            <span class="n">lines</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lines</span>
+
+    <span class="c1"># 将矩阵转化为数组
+</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1024</span><span class="p">)</span>
+
+    
+
+    <span class="k">return</span> <span class="n">data</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">img2vector</span><span class="p">(</span><span class="s">'data/digits/trainingDigits/0_0.txt'</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[0, 0, 0, ..., 0, 0, 0]])
+</code></pre></div></div>
+
+<h3 id="手写数字识别系统">手写数字识别系统</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">os</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">handwritingClassTest</span><span class="p">():</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 存储数据标签的列表
+</span>
+    <span class="n">trainingFileList</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s">'data/digits/trainingDigits'</span><span class="p">)</span>  <span class="c1"># 获取所有训练数据文件列表
+</span>
+    <span class="n">hight</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainingFileList</span><span class="p">)</span>  <span class="c1"># 训练数据个数
+</span>
+    <span class="n">trainingMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">hight</span><span class="p">,</span> <span class="mi">1024</span><span class="p">))</span>  <span class="c1"># 存储所有训练数据
+</span>
+    <span class="c1"># 读取并存储训练数据
+</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hight</span><span class="p">):</span>
+
+        <span class="n">fileName</span> <span class="o">=</span> <span class="n">trainingFileList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fileName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'_'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># 根据文件名获取标签
+</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="n">trainingMat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">img2vector</span><span class="p">(</span><span class="s">'data/digits/trainingDigits/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">fileName</span><span class="p">)</span>  <span class="c1"># 将文件转存为矩阵
+</span>
+    
+
+    <span class="c1"># 测试数据
+</span>
+    <span class="n">error_count</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 分类错误计数
+</span>
+    <span class="n">testFileList</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s">'data/digits/testDigits'</span><span class="p">)</span>  <span class="c1"># 获取所有测试数据文件列表
+</span>
+    <span class="n">hight_test</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">testFileList</span><span class="p">)</span>  <span class="c1"># 测试数据个数
+</span>
+    <span class="c1"># 读取并存储测试数据
+</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hight_test</span><span class="p">):</span>
+
+        <span class="n">fileName</span> <span class="o">=</span> <span class="n">testFileList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fileName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'_'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># 根据文件名获取标签
+</span>
+        <span class="n">vector</span> <span class="o">=</span> <span class="n">img2vector</span><span class="p">(</span><span class="s">'data/digits/trainingDigits/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">fileName</span><span class="p">)</span>  <span class="c1"># 将文件转存为矩阵
+</span>
+        <span class="n">classifierResult</span> <span class="o">=</span> <span class="n">classify0</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">trainingMat</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 使用k-近邻算法预测其类别
+</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"the classifier came back with: </span><span class="si">%</span><span class="s">d, the real answer is: </span><span class="si">%</span><span class="s">d"</span> <span class="o">%</span> <span class="p">(</span><span class="n">classifierResult</span><span class="p">,</span> <span class="n">label</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">classifierResult</span><span class="o">!=</span> <span class="n">label</span><span class="p">:</span>
+
+            <span class="n">error_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">the total number of errors is: </span><span class="si">%</span><span class="s">d"</span> <span class="o">%</span> <span class="n">error_count</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">"the total error rate is: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="p">(</span><span class="n">error_count</span><span class="o">/</span><span class="n">hight_test</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="n">handwritingClassTest</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>the classifier came back with: 0, the real answer is: 0
+
+the classifier came back with: 0, the real answer is: 0
+
+the classifier came back with: 0, the real answer is: 0
+
+the classifier came back with: 0, the real answer is: 0
+
+
+
+...
+
+
+
+the classifier came back with: 9, the real answer is: 9
+
+the classifier came back with: 9, the real answer is: 9
+
+the classifier came back with: 9, the real answer is: 9
+
+the classifier came back with: 9, the real answer is: 9
+
+
+
+the total number of errors is: 13
+
+the total error rate is: 0.013742
+</code></pre></div></div>
+
+<p>错误总量为13个，错误率为0.013742，比较令人满意。</p>
+:ET
