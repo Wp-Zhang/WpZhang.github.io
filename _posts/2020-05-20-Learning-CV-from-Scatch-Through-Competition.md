@@ -27,7 +27,7 @@ tags:
 
 赛题以街道字符为为赛题数据，训练集数据包括3W张照片，验证集数据包括1W张照片，每张照片包括颜色图像和对应的编码类别和具体位置，测试集A包括4W张照片，测试集B包括4W张照片
 
-![检测](/img/in-post/2020-05-20-learning-CV/Task1/detect.png)
+![检测](/img/in-post/2020-05-20-learning-CV/Task01/detect.png)
 
 ### 1.2 数据标签
 
@@ -41,13 +41,13 @@ tags:
 | width  | 字符宽度    |
 | label  | 字符编码    |
 
-![坐标](/img/in-post/2020-05-20-learning-CV/Task1/coordinate.png)
+![坐标](/img/in-post/2020-05-20-learning-CV/Task01/coordinate.png)
 
 在比赛数据（训练集和验证集）中，同一张图片中可能包括一个或者多个字符，因此在比赛数据的JSON标注中，会有多个字符的边框信息：
 
 | 图片                                                         | 标注信息                                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![19](/img/in-post/2020-05-20-learning-CV/Task1/raw_image.png) | ![标注](/img/in-post/2020-05-20-learning-CV/Task1/label.png) |
+| ![19](/img/in-post/2020-05-20-learning-CV/Task01/raw_image.png) | ![标注](/img/in-post/2020-05-20-learning-CV/Task01/label.png) |
 
 ### 1.3 评测指标
 
