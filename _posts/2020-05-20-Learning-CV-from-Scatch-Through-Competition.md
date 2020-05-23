@@ -311,3 +311,4 @@ for data in train_loader:
 ``` torch.Size([10, 3, 64, 128]), torch.Size([10, 6]) ```        
 
 前者为图像文件，为batchsize * chanel * height * width次序；后者为字符标签。
+
