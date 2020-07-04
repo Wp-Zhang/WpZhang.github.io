@@ -1,4 +1,4 @@
-I"�C<h3 id="题目对给定的某序列给出方案求-子序列和-最大的子序列并进行评价">题目：对给定的某序列，给出方案求 <em>子序列和</em> 最大的子序列并进行评价</h3>
+I"�C<h3 id="题目对给定的某序列给出方案求-子序列和-最大的子序列并进行评价">题目：对给定的某序列，给出方案求 <em>子序列和</em> 最大的子序列并进行评价</h3>
 <hr />
 <p>一共有四种方法：</p>
 
@@ -19,7 +19,7 @@
 
 <p>       主要思路为将序列从中间分开，分别求：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>分割点向左的最大连续序列和
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>分割点向左的最大连续序列和
 分割点向右的最大连续序列和
 横跨分割点的最大连续序列和
 </code></pre></div></div>

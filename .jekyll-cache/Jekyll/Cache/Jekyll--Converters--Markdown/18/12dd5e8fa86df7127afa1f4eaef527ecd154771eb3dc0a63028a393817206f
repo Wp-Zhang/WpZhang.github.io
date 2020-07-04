@@ -1,4 +1,4 @@
-I""<h3 id="cmd操作指令">cmd操作指令</h3>
+I"v<h3 id="cmd操作指令">cmd操作指令</h3>
 
 <table>
   <thead>
@@ -48,7 +48,7 @@
 </table>
 
 <h4 id="fetch">fetch:</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scrapy</span> <span class="n">fetch</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">baidu</span><span class="o">.</span><span class="n">com</span> <span class="o">-</span><span class="n">nolog</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scrapy</span> <span class="n">fetch</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">baidu</span><span class="p">.</span><span class="n">com</span> <span class="o">-</span><span class="n">nolog</span>
 <span class="c1">#不显示爬取日志，，直接显示爬取结果
 </span></code></pre></div></div>
 <h4 id="runspider">runspider：</h4>
@@ -67,28 +67,28 @@
 </span>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">response</span><span class="p">):</span>   <span class="c1">#response为爬取后的响应
 </span>        <span class="k">pass</span>
 
-<span class="n">scrapy</span> <span class="n">runspider</span> <span class="n">spider</span><span class="o">.</span><span class="n">py</span>
+<span class="n">scrapy</span> <span class="n">runspider</span> <span class="n">spider</span><span class="p">.</span><span class="n">py</span>
 </code></pre></div></div>
 <h4 id="shell不启动scrapy爬虫的情况下测试网站">shell(不启动scrapy爬虫的情况下测试网站):</h4>
-<p><code class="highlighter-rouge">scrapy shell http://www.baiud.com</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy shell http://www.baiud.com</code></p>
 
 <h4 id="startproject">startproject:</h4>
-<p><code class="highlighter-rouge">scrapy startproject 爬虫项目名</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy startproject 爬虫项目名</code></p>
 
 <h4 id="version">version:</h4>
-<p><code class="highlighter-rouge">scrapy version</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy version</code></p>
 
 <h4 id="view下载并用浏览器查看网页">view(下载并用浏览器查看网页)：</h4>
-<p><code class="highlighter-rouge">scrapy view http://www.baiud.com</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy view http://www.baiud.com</code></p>
 
 <h4 id="bench测试本地硬件性能">bench(测试本地硬件性能):</h4>
 <p>创建一个本地服务器，测试最大爬取网页速度
-<code class="highlighter-rouge">scrapy bentch</code></p>
+<code class="language-plaintext highlighter-rouge">scrapy bentch</code></p>
 
 <p><img src="/media/editor/20180821230930526_20190219140226739797.png" alt="" /></p>
 
 <h4 id="genspider">genspider:</h4>
-<p><code class="highlighter-rouge">scrapy genspider -l #展示爬虫模板</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy genspider -l #展示爬虫模板</code></p>
 
 <p><img src="/media/editor/20180821230950856_20190219140249288966.png" alt="" /></p>
 
@@ -98,7 +98,7 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#-*-coding: utf-8-*-
 </span><span class="kn">import</span> <span class="nn">scrapy</span>
-<span class="k">class</span> <span class="nc">MyFirstSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MyFirstSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="p">.</span><span class="n">Spider</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s">'My First'</span>
     <span class="n">allowed</span> <span class="n">domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">'baidu.com'</span><span class="p">]</span>
     <span class="n">start</span><span class="o">-</span><span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s">'http://baidu.com/'</span><span class="p">]</span>
@@ -108,16 +108,16 @@
 </code></pre></div></div>
 
 <h4 id="check测试爬虫">check(测试爬虫)：</h4>
-<p><code class="highlighter-rouge">scrapy check 爬虫名</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy check 爬虫名</code></p>
 
 <h4 id="crawl运行爬虫">crawl(运行爬虫)：</h4>
-<p><code class="highlighter-rouge">scrapy crawl 爬虫名 控制参数(--nolog等)</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy crawl 爬虫名 控制参数(--nolog等)</code></p>
 
 <h4 id="list展示当前可以使用的爬虫文件">list(展示当前可以使用的爬虫文件)：</h4>
-<p><code class="highlighter-rouge">scrapy list</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy list</code></p>
 
 <h4 id="parse获取指定url并进行相应处理及分析">parse(获取指定url并进行相应处理及分析)：</h4>
-<p><code class="highlighter-rouge">scrapy parse http://www.baidu.com</code></p>
+<p><code class="language-plaintext highlighter-rouge">scrapy parse http://www.baidu.com</code></p>
 
 <h3 id="项目结构">项目结构</h3>
 
@@ -131,13 +131,13 @@
 <p>/ : 选择标签</p>
 
 <p>text()：定位标签内容       例：
-<code class="highlighter-rouge">html/a/b/text()</code></p>
+<code class="language-plaintext highlighter-rouge">html/a/b/text()</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;a&gt;</span>
-<span class="nt">&lt;b&gt;</span>abc<span class="nt">&lt;/b&gt;</span>
-<span class="nt">&lt;/a&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;html&gt;
+&lt;a&gt;
+&lt;b&gt;abc&lt;/b&gt;
+&lt;/a&gt;
+&lt;/html&gt;
 结果：abc
 ```python
 @定位标签属性：标签[@属性=属性值]

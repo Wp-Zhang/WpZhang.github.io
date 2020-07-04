@@ -1,4 +1,4 @@
-I"�<h2 id="理论部分">理论部分</h2>
+I"ϱ<h2 id="理论部分">理论部分</h2>
 
 <h3 id="基于贝叶斯决策理论的分类方法">基于贝叶斯决策理论的分类方法</h3>
 
@@ -58,12 +58,12 @@
 </span>    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">vocabSet</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">words2Vec_set</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">inputSet</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'int'</span><span class="p">)</span>  <span class="c1"># 创建一个等长于词汇集合的由0组成的表
+    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'int'</span><span class="p">)</span>  <span class="c1"># 创建一个等长于词汇集合的由0组成的表
 </span>    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">inputSet</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">vocabList</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="n">vocabList</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 若单词出现，则在列表中对应位置将值置1
+            <span class="n">result</span><span class="p">[</span><span class="n">vocabList</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 若单词出现，则在列表中对应位置将值置1
 </span>        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">"the word </span><span class="si">%</span><span class="s">s is not in vocabulary"</span> <span class="o">%</span> <span class="n">word</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"the word %s is not in vocabulary"</span> <span class="o">%</span> <span class="n">word</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span>
 </code></pre></div></div>
 
@@ -82,11 +82,11 @@
     trainMatrix: 文档矩阵
     trainCategory: 文档类别标签
     """</span>
-    <span class="n">numTrainDocs</span> <span class="o">=</span> <span class="n">trainMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">numWords</span> <span class="o">=</span> <span class="n">trainMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">p_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">trainCategory</span><span class="p">)</span> <span class="o">/</span> <span class="n">numTrainDocs</span>  <span class="c1"># 计算侮辱性文档在总文档中占比
-</span>    <span class="n">p_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">numWords</span><span class="p">)</span>  <span class="c1"># 统计侮辱性文档中单词出现次数
-</span>    <span class="n">p_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">numWords</span><span class="p">)</span>  <span class="c1"># 统计非侮辱性文档中单词出现次数
+    <span class="n">numTrainDocs</span> <span class="o">=</span> <span class="n">trainMatrix</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">numWords</span> <span class="o">=</span> <span class="n">trainMatrix</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">p_c</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">trainCategory</span><span class="p">)</span> <span class="o">/</span> <span class="n">numTrainDocs</span>  <span class="c1"># 计算侮辱性文档在总文档中占比
+</span>    <span class="n">p_1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="n">numWords</span><span class="p">)</span>  <span class="c1"># 统计侮辱性文档中单词出现次数
+</span>    <span class="n">p_0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="n">numWords</span><span class="p">)</span>  <span class="c1"># 统计非侮辱性文档中单词出现次数
 </span>    
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numTrainDocs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">trainCategory</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -95,8 +95,8 @@
             <span class="n">p_0</span> <span class="o">+=</span> <span class="n">trainMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     
     <span class="c1"># 计算p(wj|ci)
-</span>    <span class="n">p_1_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">p_1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># 计算侮辱性文档中单词出现的占比
-</span>    <span class="n">p_0_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_0</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">p_0</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># 计算非侮辱性文档中单词出现的占比
+</span>    <span class="n">p_1_vec</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_1</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">p_1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># 计算侮辱性文档中单词出现的占比
+</span>    <span class="n">p_0_vec</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_0</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">p_0</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># 计算非侮辱性文档中单词出现的占比
 </span>    
     <span class="k">return</span> <span class="n">p_0_vec</span><span class="p">,</span> <span class="n">p_1_vec</span><span class="p">,</span> <span class="n">p_c</span>    
 </code></pre></div></div>
@@ -113,8 +113,8 @@
 <p>至此，分类器就已经训练完成了，下面开始测试分类。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">classifyNB</span><span class="p">(</span><span class="n">vec_to_classify</span><span class="p">,</span> <span class="n">p_0_vec</span><span class="p">,</span> <span class="n">p_1_vec</span><span class="p">,</span> <span class="n">p_class_1</span><span class="p">):</span>
-    <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">vec_to_classify</span> <span class="o">*</span> <span class="n">p_1_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">p_class_1</span>
-    <span class="n">p0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">vec_to_classify</span> <span class="o">*</span> <span class="n">p_0_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">p_class_1</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">vec_to_classify</span> <span class="o">*</span> <span class="n">p_1_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">p_class_1</span>
+    <span class="n">p0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">vec_to_classify</span> <span class="o">*</span> <span class="n">p_0_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">p_class_1</span>
     <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">p1</span> <span class="o">&gt;</span> <span class="n">p0</span> <span class="k">else</span> <span class="mi">0</span>
 </code></pre></div></div>
 
@@ -126,28 +126,28 @@
     <span class="n">posts</span><span class="p">,</span> <span class="n">class_list</span> <span class="o">=</span> <span class="n">loadDataSet</span><span class="p">()</span>  <span class="c1"># 获取数据集
 </span>    <span class="n">vocab_list</span> <span class="o">=</span> <span class="n">createVocabList</span><span class="p">(</span><span class="n">posts</span><span class="p">)</span>  <span class="c1"># 获取词汇集合
 </span>    <span class="c1"># 根据词汇集合中的单词是否在文档中出现，将文档列表转化为0-1矩阵
-</span>    <span class="n">trainMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">posts</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">)))</span>
+</span>    <span class="n">trainMat</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">posts</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">)))</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">post</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">posts</span><span class="p">):</span>
         <span class="n">trainMat</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">post</span><span class="p">)</span>
     <span class="c1"># 获取训练集中的信息
-</span>    <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pAbusive</span> <span class="o">=</span> <span class="n">trainNB</span><span class="p">(</span><span class="n">trainMat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">class_list</span><span class="p">))</span>
+</span>    <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pAbusive</span> <span class="o">=</span> <span class="n">trainNB</span><span class="p">(</span><span class="n">trainMat</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">class_list</span><span class="p">))</span>
     
     <span class="c1"># 准备测试集1
 </span>    <span class="n">test</span> <span class="o">=</span> <span class="p">[</span><span class="s">'love'</span><span class="p">,</span> <span class="s">'my'</span><span class="p">,</span> <span class="s">'dalmation'</span><span class="p">]</span>
-    <span class="n">test_doc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">test</span><span class="p">))</span>
+    <span class="n">test_doc</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">test</span><span class="p">))</span>
     <span class="c1"># 分类
-</span>    <span class="k">print</span><span class="p">(</span><span class="s">"'"</span><span class="o">+</span><span class="s">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="o">+</span><span class="s">"'"</span><span class="p">,</span><span class="s">"classified as :"</span><span class="p">,</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">test_doc</span><span class="p">,</span> <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pAbusive</span><span class="p">))</span>
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">"'"</span><span class="o">+</span><span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="o">+</span><span class="s">"'"</span><span class="p">,</span><span class="s">"classified as :"</span><span class="p">,</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">test_doc</span><span class="p">,</span> <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pAbusive</span><span class="p">))</span>
     <span class="c1"># 准备测试集2
 </span>    <span class="n">test</span> <span class="o">=</span> <span class="p">[</span><span class="s">'stupid'</span><span class="p">,</span><span class="s">'garbage'</span><span class="p">]</span>
-    <span class="n">test_doc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">test</span><span class="p">))</span>
+    <span class="n">test_doc</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">test</span><span class="p">))</span>
     <span class="c1"># 分类
-</span>    <span class="k">print</span><span class="p">(</span><span class="s">"'"</span><span class="o">+</span><span class="s">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="o">+</span><span class="s">"'"</span><span class="p">,</span><span class="s">"classified as :"</span><span class="p">,</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">test_doc</span><span class="p">,</span> <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pAbusive</span><span class="p">))</span>
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">"'"</span><span class="o">+</span><span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="o">+</span><span class="s">"'"</span><span class="p">,</span><span class="s">"classified as :"</span><span class="p">,</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">test_doc</span><span class="p">,</span> <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pAbusive</span><span class="p">))</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">testingNB</span><span class="p">()</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'love my dalmation' classified as : 0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'love my dalmation' classified as : 0
 'stupid garbage' classified as : 1
 </code></pre></div></div>
 
@@ -158,14 +158,14 @@
 <p>之前使用的<strong>词集模型</strong>将每个词的出现与否作为一个特征，如果某个词在文档中出现不止一次，则意味着该词出现的次数可能包含了一些该词出现与否所没有的隐含信息，这就是词袋模型。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">words2Vec_bag</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">inputSet</span><span class="p">):</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vocabList</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vocabList</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">inputSet</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">vocabList</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="n">vocabList</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">vocabList</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">result</span>
 </code></pre></div></div>
 
-<p>words2Vec_bag函数中将原来的<code class="highlighter-rouge">result[vocabList.index(word)] = 1</code>改为了<code class="highlighter-rouge">result[vocabList.index(word)] += 1</code></p>
+<p>words2Vec_bag函数中将原来的<code class="language-plaintext highlighter-rouge">result[vocabList.index(word)] = 1</code>改为了<code class="language-plaintext highlighter-rouge">result[vocabList.index(word)] += 1</code></p>
 
 <h2 id="使用朴素贝叶斯过滤垃圾邮件">使用朴素贝叶斯过滤垃圾邮件</h2>
 
@@ -173,8 +173,8 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">textParse</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">re</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">r'\W*'</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">_</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">r'\W*'</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_</span><span class="p">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">]</span>
 </code></pre></div></div>
 
 <p>textParse函数将一个字符串文本拆分为单词列表，并将所有大写字母转换为小写，为了删除一些没有什么作用的单词，只返回拆分结果中长度大于2的单词。</p>
@@ -189,22 +189,22 @@
 </span>    <span class="kn">import</span> <span class="nn">os</span>
     <span class="c1">## 读取正常邮件
 </span>    <span class="n">base_dir_spam</span> <span class="o">=</span> <span class="s">'data/email/spam'</span>
-    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">base_dir_spam</span><span class="p">):</span>
-        <span class="n">word_list</span> <span class="o">=</span> <span class="n">textParse</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">base_dir_spam</span><span class="o">+</span><span class="s">'/'</span><span class="o">+</span><span class="nb">file</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># 拆分文档内容
-</span>        <span class="n">doc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
-        <span class="n">full_text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
-        <span class="n">class_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">base_dir_spam</span><span class="p">):</span>
+        <span class="n">word_list</span> <span class="o">=</span> <span class="n">textParse</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">base_dir_spam</span><span class="o">+</span><span class="s">'/'</span><span class="o">+</span><span class="nb">file</span><span class="p">,</span><span class="s">'r'</span><span class="p">).</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># 拆分文档内容
+</span>        <span class="n">doc_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+        <span class="n">full_text</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+        <span class="n">class_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1">## 读取垃圾邮件
 </span>    <span class="n">base_dir_ham</span> <span class="o">=</span> <span class="s">'data/email/ham'</span>
-    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">base_dir_ham</span><span class="p">):</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">base_dir_ham</span><span class="p">):</span>
         <span class="s">"""fileName = base_dir_ham+'/'+file
         print(fileName)
         with open(fileName, '') as f:
             content = f.read()"""</span>
-        <span class="n">word_list</span> <span class="o">=</span> <span class="n">textParse</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">base_dir_ham</span><span class="o">+</span><span class="s">'/'</span><span class="o">+</span><span class="nb">file</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># 查分文档内容
-</span>        <span class="n">doc_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
-        <span class="n">full_text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
-        <span class="n">class_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">word_list</span> <span class="o">=</span> <span class="n">textParse</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">base_dir_ham</span><span class="o">+</span><span class="s">'/'</span><span class="o">+</span><span class="nb">file</span><span class="p">,</span><span class="s">'r'</span><span class="p">).</span><span class="n">read</span><span class="p">())</span>  <span class="c1"># 查分文档内容
+</span>        <span class="n">doc_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+        <span class="n">full_text</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span>
+        <span class="n">class_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     
     <span class="c1"># 训练分类器
 </span>    <span class="n">vocab_list</span> <span class="o">=</span> <span class="n">createVocabList</span><span class="p">(</span><span class="n">doc_list</span><span class="p">)</span>
@@ -214,34 +214,34 @@
 </span>    <span class="c1">#train_range = range(len(doc))
 </span>    <span class="c1">## 随机构建训练集
 </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">train_test_ratio</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">))):</span>
-        <span class="n">rand_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">))</span>
-        <span class="n">training_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">rand_index</span><span class="p">))</span>
-        <span class="n">train_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">rand_index</span><span class="p">))</span>
+        <span class="n">rand_index</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">))</span>
+        <span class="n">training_set</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc_list</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">rand_index</span><span class="p">))</span>
+        <span class="n">train_classes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_list</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">rand_index</span><span class="p">))</span>
     <span class="c1">## 构建测试集
 </span>    <span class="n">test_set</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 测试集
 </span>    <span class="n">test_classes</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 测试集标签
-</span>    <span class="n">test_set</span> <span class="o">=</span> <span class="n">doc_list</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">test_classes</span> <span class="o">=</span> <span class="n">class_list</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span>    <span class="n">test_set</span> <span class="o">=</span> <span class="n">doc_list</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">test_classes</span> <span class="o">=</span> <span class="n">class_list</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="c1">## 将文档数据转化为矩阵
 </span>    <span class="n">train_mat</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">training_set</span><span class="p">:</span>
-        <span class="n">train_mat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
+        <span class="n">train_mat</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">content</span><span class="p">))</span>
     <span class="c1">## 训练分类器
-</span>    <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pSpam</span> <span class="o">=</span> <span class="n">trainNB</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_mat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_classes</span><span class="p">))</span>
+</span>    <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pSpam</span> <span class="o">=</span> <span class="n">trainNB</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_mat</span><span class="p">),</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_classes</span><span class="p">))</span>
     
     <span class="c1"># 测试分类器
 </span>    <span class="n">error_count</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_set</span><span class="p">):</span>
         <span class="n">word_vec</span> <span class="o">=</span> <span class="n">words2Vec_set</span><span class="p">(</span><span class="n">vocab_list</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">word_vec</span><span class="p">),</span> <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pSpam</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">word_vec</span><span class="p">),</span> <span class="n">p0_vec</span><span class="p">,</span> <span class="n">p1_vec</span><span class="p">,</span> <span class="n">pSpam</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="n">test_classes</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
             <span class="n">error_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"the error rate is </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="p">(</span><span class="n">error_count</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">test_set</span><span class="p">)))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"the error rate is %f"</span> <span class="o">%</span> <span class="p">(</span><span class="n">error_count</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">test_set</span><span class="p">)))</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test_garbage_email</span><span class="p">()</span>
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>the error rate is 0.000000
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>the error rate is 0.000000
 </code></pre></div></div>
 
 <h2 id="使用朴素贝叶斯分类器从个人广告中获取区域倾向">使用朴素贝叶斯分类器从个人广告中获取区域倾向</h2>
@@ -254,8 +254,8 @@
     """</span>
     <span class="n">freqDict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">vocabList</span><span class="p">:</span>
-        <span class="n">freqDict</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullText</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-    <span class="n">freqDict</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">freqDict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 将单词出现次数按从大到小排列
+        <span class="n">freqDict</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullText</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="n">freqDict</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">freqDict</span><span class="p">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 将单词出现次数按从大到小排列
 </span>    <span class="k">return</span> <span class="n">freqDict</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span>  <span class="c1"># 返回出现次数最多的30个单词
 </span></code></pre></div></div>
 
@@ -266,38 +266,38 @@
 </span>    <span class="c1"># 数据处理
 </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">minLen</span><span class="p">):</span>
         <span class="n">wordList</span> <span class="o">=</span> <span class="n">textParse</span><span class="p">(</span><span class="n">feed1</span><span class="p">[</span><span class="s">'entries'</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">'summary'</span><span class="p">])</span>
-        <span class="n">docList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
-        <span class="n">fullText</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
-        <span class="n">classList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 将纽约设置为类别1
+        <span class="n">docList</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
+        <span class="n">fullText</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
+        <span class="n">classList</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># 将纽约设置为类别1
 </span>        <span class="n">wordList</span> <span class="o">=</span> <span class="n">textParse</span><span class="p">(</span><span class="n">feed0</span><span class="p">[</span><span class="s">'entries'</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">'summary'</span><span class="p">])</span>
-        <span class="n">docList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
-        <span class="n">fullText</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
-        <span class="n">classList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># 将旧金山设置为类别0
+        <span class="n">docList</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
+        <span class="n">fullText</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">wordList</span><span class="p">)</span>
+        <span class="n">classList</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># 将旧金山设置为类别0
 </span>    <span class="n">vocabList</span> <span class="o">=</span> <span class="n">createVocabList</span><span class="p">(</span><span class="n">docList</span><span class="p">)</span>
     
     <span class="c1"># 去除出现次数最多的30个词语
 </span>    <span class="n">top30Words</span> <span class="o">=</span> <span class="n">calcMostFreq</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span><span class="n">fullText</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">pairW</span> <span class="ow">in</span> <span class="n">top30Words</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">pairW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">vocabList</span><span class="p">:</span> <span class="n">vocabList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pairW</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">pairW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">vocabList</span><span class="p">:</span> <span class="n">vocabList</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pairW</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     
     <span class="c1"># 构建测试集
 </span>    <span class="n">trainingSet</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">minLen</span><span class="p">);</span> <span class="n">testSet</span><span class="o">=</span><span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-        <span class="n">randIndex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">trainingSet</span><span class="p">))</span>
-        <span class="n">testSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trainingSet</span><span class="p">[</span><span class="n">randIndex</span><span class="p">])</span>
+        <span class="n">randIndex</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">trainingSet</span><span class="p">))</span>
+        <span class="n">testSet</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">trainingSet</span><span class="p">[</span><span class="n">randIndex</span><span class="p">])</span>
         <span class="k">del</span><span class="p">(</span><span class="n">trainingSet</span><span class="p">[</span><span class="n">randIndex</span><span class="p">])</span>
     <span class="c1"># 构建训练集
 </span>    <span class="n">trainMat</span><span class="o">=</span><span class="p">[];</span> <span class="n">trainClasses</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">docIndex</span> <span class="ow">in</span> <span class="n">trainingSet</span><span class="p">:</span>
-        <span class="n">trainMat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">words2Vec_bag</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">docList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">]))</span>
-        <span class="n">trainClasses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">classList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">])</span>
-    <span class="n">p0V</span><span class="p">,</span><span class="n">p1V</span><span class="p">,</span><span class="n">pSpam</span> <span class="o">=</span> <span class="n">trainNB</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trainMat</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trainClasses</span><span class="p">))</span>
+        <span class="n">trainMat</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">words2Vec_bag</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">docList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">]))</span>
+        <span class="n">trainClasses</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">classList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">])</span>
+    <span class="n">p0V</span><span class="p">,</span><span class="n">p1V</span><span class="p">,</span><span class="n">pSpam</span> <span class="o">=</span> <span class="n">trainNB</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">trainMat</span><span class="p">),</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">trainClasses</span><span class="p">))</span>
     
     <span class="c1"># 分类测试
 </span>    <span class="n">errorCount</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">docIndex</span> <span class="ow">in</span> <span class="n">testSet</span><span class="p">:</span>
         <span class="n">wordVector</span> <span class="o">=</span> <span class="n">words2Vec_bag</span><span class="p">(</span><span class="n">vocabList</span><span class="p">,</span> <span class="n">docList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wordVector</span><span class="p">),</span><span class="n">p0V</span><span class="p">,</span><span class="n">p1V</span><span class="p">,</span><span class="n">pSpam</span><span class="p">)</span> <span class="o">!=</span> <span class="n">classList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">classifyNB</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">wordVector</span><span class="p">),</span><span class="n">p0V</span><span class="p">,</span><span class="n">p1V</span><span class="p">,</span><span class="n">pSpam</span><span class="p">)</span> <span class="o">!=</span> <span class="n">classList</span><span class="p">[</span><span class="n">docIndex</span><span class="p">]:</span>
             <span class="n">errorCount</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">print</span><span class="p">(</span><span class="s">'the error rate is: '</span><span class="p">,</span> <span class="n">errorCount</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">testSet</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">vocabList</span><span class="p">,</span><span class="n">p0V</span><span class="p">,</span><span class="n">p1V</span>

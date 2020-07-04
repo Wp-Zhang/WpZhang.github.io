@@ -1,4 +1,4 @@
-I"˪<h3 id="一创建scrapy项目">一、创建Scrapy项目</h3>
+I"�<h3 id="一创建scrapy项目">一、创建Scrapy项目</h3>
 <p>在cmd中输入一下指令创建一个新的scrapy项目及一个爬虫</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scrapy</span> <span class="n">startproject</span> <span class="n">JD_Goods</span>
@@ -16,35 +16,35 @@
 <p>经过筛选，在items.py下设置下列容器(忽略我的Chinglish命名法…)：</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">#商品名称
-</span>    <span class="n">name</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">name</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#价格
-</span>    <span class="n">price</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">price</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#链接
-</span>    <span class="n">link</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">link</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#内存
-</span>    <span class="n">internalStorage</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">internalStorage</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#CPU类型
-</span>    <span class="n">cpuType</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">cpuType</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#CPU型号
-</span>    <span class="n">cpuModel</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">cpuModel</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#CPU速度
-</span>    <span class="n">cpuSpeed</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">cpuSpeed</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#CPU核心
-</span>    <span class="n">cpuCore</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">cpuCore</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#硬盘容量
-</span>    <span class="n">diskCapacity</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">diskCapacity</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#固态硬盘
-</span>    <span class="n">SSD</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">SSD</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#显卡类型
-</span>    <span class="n">GCtype</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">GCtype</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#显示芯片
-</span>    <span class="n">GCcore</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">GCcore</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#显存容量
-</span>    <span class="n">GCcapacity</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">GCcapacity</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#尺寸
-</span>    <span class="n">size</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">size</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
     <span class="c1">#重量
-</span>    <span class="n">weight</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</span>    <span class="n">weight</span> <span class="o">=</span> <span class="n">scrapy</span><span class="p">.</span><span class="n">Field</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h3 id="三爬虫编写">三、爬虫编写</h3>
@@ -62,35 +62,35 @@
 
 <p>       由于要得到笔记本电脑的详细信息需要进入每台笔记本电脑的单独的页面，所以我选择在第一次请求的时候将所有笔记本电脑的链接爬取到链表中。首先分析每一页的url规律，发现规律为：</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"https://list.jd.com/list.html?cat=670,671,672&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="err">页码</span><span class="p">)</span> <span class="o">+</span> <span class="s">"&amp;sort=sort_totalsales15_desc&amp;trans=1&amp;JL=6_0_0#J_main"</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"https://list.jd.com/list.html?cat=670,671,672&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">页码</span><span class="p">)</span> <span class="o">+</span> <span class="s">"&amp;sort=sort_totalsales15_desc&amp;trans=1&amp;JL=6_0_0#J_main"</span>
 </code></pre></div></div>
 <p>然后分析页面中包含末尾页数的信息，用正则表达式提取：</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">start_requests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1">#TOTAL为总页数
 </span>        <span class="n">url</span> <span class="o">=</span> <span class="s">"https://list.jd.com/list.html?    cat=670,671,672&amp;page=1&amp;sort=sort_totalsales15_desc&amp;trans=1&amp;JL=6_0_0#J_main"</span>
-        <span class="n">TOTAL</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'&lt;em&gt;共&lt;b&gt;(.*?)&lt;/b&gt;'</span><span class="p">,</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">,</span><span class="s">'ignore'</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">TOTAL</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'&lt;em&gt;共&lt;b&gt;(.*?)&lt;/b&gt;'</span><span class="p">,</span><span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">,</span><span class="s">'ignore'</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div></div>
 
 <p>所以用以下代码将url链接存入list中：</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="bp">self</span><span class="p">.</span><span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="s">"https://list.jd.com/list.html?cat=670,671,672&amp;page="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
                     <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">"&amp;sort=sort_totalsales15_desc&amp;trans=1&amp;JL=6_0_0#J_main"</span>
-                <span class="n">page</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">,</span> <span class="s">'ignore'</span><span class="p">)</span>
+                <span class="n">page</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">,</span> <span class="s">'ignore'</span><span class="p">)</span>
                 <span class="n">link_pattern</span> <span class="o">=</span> <span class="s">'&lt;a target="_blank" title="" href="(.*?)"&gt;'</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">link_pattern</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">links</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">links</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">link_pattern</span><span class="p">,</span> <span class="n">page</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">link_pattern</span><span class="p">,</span> <span class="n">page</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">links</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">link_pattern</span><span class="p">,</span> <span class="n">page</span><span class="p">))</span>
                 <span class="k">print</span><span class="p">(</span><span class="s">"第"</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s">"页处理完成"</span><span class="p">)</span>
-            <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s">'code'</span><span class="p">):</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">code</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s">'reason'</span><span class="p">):</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">reason</span><span class="p">)</span>
                 <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
                 <span class="k">continue</span>
             <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -101,14 +101,14 @@
 
 <p>发现提取出的商品url前都缺少了“https:”，二次处理：</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">'https:'</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">'https:'</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 </code></pre></div></div>
 <p>由于之后每次爬取商品的信息时需要在self.links列表中调用不同index对应的url，这里设置一个全局变量index并设置为0，然后start_request方法就结束了:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">global</span> <span class="n">index</span>
         <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">yield</span> <span class="n">Request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="n">index</span><span class="p">],</span><span class="n">headers</span><span class="o">=</span><span class="n">ua</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">Request</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">[</span><span class="n">index</span><span class="p">],</span><span class="n">headers</span><span class="o">=</span><span class="n">ua</span><span class="p">)</span>
 </code></pre></div></div>
 <p>接下来码parse方法的代码：</p>
 
@@ -118,16 +118,16 @@
 </code></pre></div></div>
 <p>然后分析各信息在网页源码中的位置并提取，注意此时link在star_request()中已经提取完了，这里调用index取出，并让index自增，由于xpath不方便提取所需要的标签内容，这里依然使用正则表达式</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">data</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//img[@id="spec-img"]/@alt'</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
-        <span class="n">data</span><span class="p">[</span><span class="s">'link'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">data</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//img[@id="spec-img"]/@alt'</span><span class="p">).</span><span class="n">extract</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">'link'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
         
-        <span class="n">page_content</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'link'</span><span class="p">])</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'gbk'</span><span class="p">,</span><span class="s">'ignore'</span><span class="p">)</span>
+        <span class="n">page_content</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">'link'</span><span class="p">]).</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">'gbk'</span><span class="p">,</span><span class="s">'ignore'</span><span class="p">)</span>
 
         <span class="n">pattern1</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;内存容量&lt;/dt&gt;.*?&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
         <span class="n">pattern2</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;内存类型&lt;/dt&gt;.*?&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern1</span><span class="p">,</span><span class="n">page_content</span><span class="p">,</span><span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
-        <span class="n">result2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern2</span><span class="p">,</span><span class="n">page_content</span><span class="p">,</span><span class="n">re</span><span class="o">.</span><span class="n">S</span><span class="p">)</span>
+        <span class="n">result1</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern1</span><span class="p">,</span><span class="n">page_content</span><span class="p">,</span><span class="n">re</span><span class="p">.</span><span class="n">S</span><span class="p">)</span>
+        <span class="n">result2</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern2</span><span class="p">,</span><span class="n">page_content</span><span class="p">,</span><span class="n">re</span><span class="p">.</span><span class="n">S</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">result2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'internalStorage'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">result1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">'    '</span><span class="o">+</span><span class="n">result2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">result1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">result2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -138,7 +138,7 @@
             <span class="n">data</span><span class="p">[</span><span class="s">'internalStorage'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;CPU类型&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuType'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -146,70 +146,70 @@
 
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;CPU型号&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuModel'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuModel'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;CPU速度&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuSpeed'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuSpeed'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">' '</span><span class="p">]</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;核心&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuCore'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'cpuCore'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;硬盘容量&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span><span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'diskCapacity'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'diskCapacity'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;固态硬盘&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'SSD'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'SSD'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;类型&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'GCtype'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'GCtype'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;显示芯片&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'GCcore'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'GCcore'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;显存容量&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'GCcapacity'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'GCcapacity'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;尺寸&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'size'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'size'</span><span class="p">]</span> <span class="o">=</span> <span class="s">' '</span>
 
         <span class="n">pattern</span> <span class="o">=</span> <span class="s">'&lt;dt&gt;净重&lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">page_content</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s">'weight'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -221,19 +221,19 @@
 <p>在网页源码中无法找到价格信息，于是采用抓包分析，得到价格所在的json文件地址，然后提取：</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c1">#获取商品价格
-</span>        <span class="n">good_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'.*/(.*?).html'</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="s">'link'</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+</span>        <span class="n">good_id</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="s">'.*/(.*?).html'</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="s">'link'</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">price_url</span> <span class="o">=</span> <span class="s">'https://p.3.cn/prices/mgets?&amp;skuIds=J_'</span> <span class="o">+</span> <span class="n">good_id</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">price_url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">price_url</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
         <span class="k">print</span><span class="p">(</span><span class="n">price_url</span><span class="p">)</span>
-        <span class="n">Json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Json</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">data</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="n">Json</span><span class="p">[</span><span class="s">'p'</span><span class="p">]</span>
 </code></pre></div></div>
 <p>最后，返回item对象并设置循环爬取：</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="k">yield</span> <span class="n">data</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">)):</span>
-            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">yield</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parse</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">)):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">links</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">parse</span><span class="p">)</span>
 </code></pre></div></div>
 <p>至此，爬虫文件的代码就码完了</p>
 
@@ -244,7 +244,7 @@
     <span class="k">global</span> <span class="n">i</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
-        <span class="n">database</span> <span class="o">=</span> <span class="n">pymysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">'root'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'Zwp0816...'</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">'JD_Goods'</span><span class="p">)</span>
+        <span class="n">database</span> <span class="o">=</span> <span class="n">pymysql</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">'root'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'Zwp0816...'</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="s">'JD_Goods'</span><span class="p">)</span>
         <span class="c1"># print("index" + str(i))
 </span>        <span class="n">name</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s">'name'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1">#print(name)
@@ -277,14 +277,14 @@
 </span>        <span class="n">link</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s">'link'</span><span class="p">]</span>
         <span class="n">sql</span> <span class="o">=</span> <span class="s">"insert into pcInfo values('"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">price</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">internalStorage</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">cpuType</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">cpuModel</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">cpuSpeed</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">cpuCore</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">diskCapacity</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">SSD</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">GCtype</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">GCcore</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">GCcapacity</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">+</span> <span class="s">"','"</span> <span class="o">+</span> <span class="n">link</span> <span class="o">+</span> <span class="s">"');"</span>
         <span class="c1">#print(1)
-</span>        <span class="n">database</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+</span>        <span class="n">database</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="n">commit</span> <span class="o">=</span> <span class="s">"commit;"</span>
         <span class="c1">#print(2)
-</span>        <span class="n">database</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
+</span>        <span class="n">database</span><span class="p">.</span><span class="n">query</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span>
         <span class="k">global</span> <span class="n">i</span>
         <span class="k">print</span><span class="p">(</span><span class="s">"第"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s">"个商品处理完成"</span><span class="p">)</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">database</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">database</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">item</span>
 </code></pre></div></div>
 

@@ -6,16 +6,16 @@
 	树节点
 	"""</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
 
 <span class="k">class</span> <span class="nc">BinTree</span><span class="p">:</span>
 	<span class="s">"""
 	树
 	"""</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">TreeNode</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="方法一">方法一</h3>
@@ -23,18 +23,18 @@
 
 <p><strong>Python代码：</strong></p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">getHightByBFS1</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
-    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="p">,</span><span class="n">TreeNode</span><span class="p">(</span><span class="s">"#"</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)]</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="p">.</span><span class="n">root</span><span class="p">,</span><span class="n">TreeNode</span><span class="p">(</span><span class="s">"#"</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)]</span>
     <span class="n">hight</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">data</span> <span class="o">==</span> <span class="s">"#"</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">data</span> <span class="o">==</span> <span class="s">"#"</span><span class="p">:</span>
             <span class="n">hight</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TreeNode</span><span class="p">(</span><span class="s">"#"</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
-            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
-            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+                <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">TreeNode</span><span class="p">(</span><span class="s">"#"</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">hight</span>
 </code></pre></div></div>
 
@@ -43,17 +43,17 @@
 
 <p><strong>Python代码</strong>：</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">getHightByBFS2</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
-    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="p">]</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">tree</span><span class="p">.</span><span class="n">root</span><span class="p">]</span>
     <span class="n">hight</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">count1</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">count2</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
-            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">:</span>
+            <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
             <span class="n">count2</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
-            <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="n">queue</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
             <span class="n">count2</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">count1</span> <span class="o">-=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">count1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>

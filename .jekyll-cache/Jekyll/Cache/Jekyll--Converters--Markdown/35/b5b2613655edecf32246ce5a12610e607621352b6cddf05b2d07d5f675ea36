@@ -1,4 +1,4 @@
-I"�><h3 id="题目学习google-page-rank-算法">题目：学习Google Page Rank 算法</h3>
+I"�><h3 id="题目学习google-page-rank-算法">题目：学习Google Page Rank 算法</h3>
 <hr />
 <p><strong>算法核心思想：</strong></p>
 <blockquote>
@@ -65,22 +65,22 @@
 
 <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.85</span>    <span class="c1"># α值
 </span>
-<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
     <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="p">])</span>
 
-<span class="n">pr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">]),</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-<span class="n">iteration</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">pr</span><span class="o">.</span><span class="n">T</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">"PR(A)"</span><span class="p">,</span> <span class="s">"PR(B)"</span><span class="p">,</span> <span class="s">"PR(C)"</span><span class="p">])</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">around</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">]),</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">iteration</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">pr</span><span class="p">.</span><span class="n">T</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">"PR(A)"</span><span class="p">,</span> <span class="s">"PR(B)"</span><span class="p">,</span> <span class="s">"PR(C)"</span><span class="p">])</span>
 
 <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">pre</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">pr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">M</span> <span class="o">@</span> <span class="n">pr</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="n">pre</span><span class="p">)</span><span class="o">.</span><span class="nb">all</span><span class="p">():</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="n">pr</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">pr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">around</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">M</span> <span class="o">@</span> <span class="n">pr</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="n">pre</span><span class="p">).</span><span class="nb">all</span><span class="p">():</span>
         <span class="k">break</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">pr</span><span class="o">.</span><span class="n">T</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">"PR(A)"</span><span class="p">,</span> <span class="s">"PR(B)"</span><span class="p">,</span> <span class="s">"PR(C)"</span><span class="p">])</span>
-    <span class="n">iteration</span> <span class="o">=</span> <span class="n">iteration</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">pr</span><span class="p">.</span><span class="n">T</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">"PR(A)"</span><span class="p">,</span> <span class="s">"PR(B)"</span><span class="p">,</span> <span class="s">"PR(C)"</span><span class="p">])</span>
+    <span class="n">iteration</span> <span class="o">=</span> <span class="n">iteration</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span>
 </code></pre></div></div>
@@ -116,7 +116,7 @@
 <span class="mi">27</span>  <span class="mf">0.150000</span>  <span class="mf">1.833433</span>  <span class="mf">1.833433</span>
 <span class="mi">28</span>  <span class="mf">0.150000</span>  <span class="mf">1.835918</span>  <span class="mf">1.835918</span>
 <span class="mi">29</span>  <span class="mf">0.150000</span>  <span class="mf">1.838030</span>  <span class="mf">1.838030</span>
-<span class="o">..</span>       <span class="o">...</span>       <span class="o">...</span>       <span class="o">...</span>
+<span class="p">..</span>       <span class="p">...</span>       <span class="p">...</span>       <span class="p">...</span>
 <span class="mi">51</span>  <span class="mf">0.150000</span>  <span class="mf">1.849664</span>  <span class="mf">1.849664</span>
 <span class="mi">52</span>  <span class="mf">0.150000</span>  <span class="mf">1.849714</span>  <span class="mf">1.849714</span>
 <span class="mi">53</span>  <span class="mf">0.150000</span>  <span class="mf">1.849757</span>  <span class="mf">1.849757</span>

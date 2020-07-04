@@ -1,4 +1,4 @@
-I"-<h1 id="urllib库">urllib库</h1>
+I"�~<h1 id="urllib库">urllib库</h1>
 <h3 id="1导入对应模块">1.导入对应模块：</h3>
 <p>因为Python 3.*版本中将urllib和urllib2合并为urllib，所以直接</p>
 
@@ -8,7 +8,7 @@
 <h3 id="2使用-urllibrequesturlopenurl打开并爬取一个网页">2.使用 urllib.request.urlopen(url)打开并爬取一个网页</h3>
 <p>这里将百度作为例子</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">file</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">file</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="3将对应网页的内容读取出来">3.将对应网页的内容读取出来</h3>
@@ -19,8 +19,8 @@
   <li>c. file.readline() 读取文件的一行内容。</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="n">dataline</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">dataline</span> <span class="o">=</span> <span class="nb">file</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>这里分别将爬取的网页的全部内容和一行内容分别赋给变量data, dataline
@@ -39,23 +39,23 @@
   <li>关闭文件</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"D:/Python/test.html"</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></div>
 <p>或</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"D:/Python/test.html"</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
-    <span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="nb">file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>此外，还有另一种方法直接写入文件：</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">filename</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">"D:/Python/test.html"</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">filename</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">"D:/Python/test.html"</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>可以使用用 urllib.request.cleanup()清空使用urlretrieve产生的缓存。</p>
@@ -69,8 +69,8 @@
 
     <p>这里以淘宝为例</p>
 
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s">"http://www.taobao.com"</span><span class="p">)</span>
- <span class="s">'http</span><span class="si">%3</span><span class="s">A//www.taobao.com'</span>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">quote</span><span class="p">(</span><span class="s">"http://www.taobao.com"</span><span class="p">)</span>
+ <span class="s">'http%3A//www.taobao.com'</span>
 </code></pre></div>    </div>
 
     <p>相应地，对url进行解码诗可以使用如下操作：</p>
@@ -85,18 +85,18 @@
 <h5 id="方法一-使用-build_opner修改报头">方法一： 使用 build_opner()修改报头</h5>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.baidu.com"</span>
-<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">()</span>
-<span class="n">opener</span><span class="o">.</span><span class="n">adddheaders</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span><span class="s">'Mozilla/5.0'</span><span class="p">)</span> <span class="p">]</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">build_opener</span><span class="p">()</span>
+<span class="n">opener</span><span class="p">.</span><span class="n">adddheaders</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span><span class="s">'Mozilla/5.0'</span><span class="p">)</span> <span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">opener</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">url</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h5 id="方法二-使用-add_headers添加报头">方法二： 使用 add_headers()添加报头</h5>
 <p>首先使用urllib.request.Request(url)创建一个Request对象并赋给request，然后使用add_header()添加对应的报头信息</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.baidu.com"</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0'</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
 </code></pre></div></div>
 <h5 id="方法三-使用headers参数">方法三： 使用headers参数</h5>
 <p>首先构造报头信息</p>
@@ -105,13 +105,13 @@
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">'user-agent'</span><span class="p">:</span><span class="s">'Mozilla/5.0'</span>
 <span class="p">}</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="7超时设置">7.超时设置</h3>
 <p>有时访问一个网页，其长时间未反应，系统会判断访问超时，可以自己设置限制的超时访问时间</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"htttp://www.baidu.com"</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"htttp://www.baidu.com"</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>其中，timeout的单位为秒。
@@ -122,9 +122,9 @@
 <span class="kn">import</span> <span class="nn">urllib.error</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">reason</span><span class="p">,</span> <span class="n">socket</span><span class="p">.</span><span class="n">timeout</span><span class="p">):</span>
         <span class="k">print</span><span class="p">(</span><span class="s">'TIME OUT'</span><span class="p">)</span>
 </code></pre></div></div>
 
@@ -133,27 +133,27 @@
 <h4 id="1-get-请求">1). GET 请求</h4>
 <p>在淘宝上搜索Python后观察可以发现URL由</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">com</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="p">.</span><span class="n">taobao</span><span class="p">.</span><span class="n">com</span>
 </code></pre></div></div>
 
 <p>变为了</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">s</span><span class="o">.</span><span class="n">taobao</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">search</span><span class="err">?</span><span class="n">q</span><span class="o">=</span><span class="n">Python</span><span class="o">&amp;</span><span class="n">imgfile</span><span class="o">=&amp;</span><span class="n">commend</span><span class="o">=</span><span class="nb">all</span><span class="o">&amp;</span><span class="n">ssid</span><span class="o">=</span><span class="n">s5</span><span class="o">-</span><span class="n">e</span><span class="o">&amp;</span><span class="n">search_type</span><span class="o">=</span><span class="n">item</span><span class="o">&amp;</span><span class="n">sourceId</span><span class="o">=</span><span class="n">tb</span><span class="o">.</span><span class="n">index</span><span class="o">&amp;</span><span class="n">spm</span><span class="o">=</span><span class="n">a21bo</span><span class="mf">.2017.201856</span><span class="o">-</span><span class="n">taobao</span><span class="o">-</span><span class="n">item</span><span class="mf">.1</span><span class="o">&amp;</span><span class="n">ie</span><span class="o">=</span><span class="n">utf8</span><span class="o">&amp;</span><span class="n">initiative_id</span><span class="o">=</span><span class="n">tbindexz_20170306</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">s</span><span class="p">.</span><span class="n">taobao</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">search</span><span class="err">?</span><span class="n">q</span><span class="o">=</span><span class="n">Python</span><span class="o">&amp;</span><span class="n">imgfile</span><span class="o">=&amp;</span><span class="n">commend</span><span class="o">=</span><span class="nb">all</span><span class="o">&amp;</span><span class="n">ssid</span><span class="o">=</span><span class="n">s5</span><span class="o">-</span><span class="n">e</span><span class="o">&amp;</span><span class="n">search_type</span><span class="o">=</span><span class="n">item</span><span class="o">&amp;</span><span class="n">sourceId</span><span class="o">=</span><span class="n">tb</span><span class="p">.</span><span class="n">index</span><span class="o">&amp;</span><span class="n">spm</span><span class="o">=</span><span class="n">a21bo</span><span class="p">.</span><span class="mf">2017.201856</span><span class="o">-</span><span class="n">taobao</span><span class="o">-</span><span class="n">item</span><span class="p">.</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">ie</span><span class="o">=</span><span class="n">utf8</span><span class="o">&amp;</span><span class="n">initiative_id</span><span class="o">=</span><span class="n">tbindexz_20170306</span>
 </code></pre></div></div>
 
 <p>其中所搜索的‘Pyhton’在‘search?/q=’后。由此推测，如果</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">URL</span><span class="o">=</span> <span class="s">'htttp://s.taobao.com/search?q='</span> <span class="o">+</span> <span class="err">关键词</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">URL</span><span class="o">=</span> <span class="s">'htttp://s.taobao.com/search?q='</span> <span class="o">+</span> <span class="n">关键词</span>
 </code></pre></div></div>
 <p>那么我们就可以直接爬取我们想要在淘宝上搜索的商品的网页信息。因此可以如下操作：</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"http://s.taobao.com/search?q="</span>
 <span class="n">keyword</span> <span class="o">=</span> <span class="s">"Python"</span>
 <span class="n">url</span> <span class="o">+=</span> <span class="n">keyword</span> 
-<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"D:/Pyhton/2.html"</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>这样就保存了淘宝搜索关键词为“Python”的网页信息。
@@ -161,7 +161,7 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"http://s.taobao.com/search?q="</span>
 <span class="n">keyword</span> <span class="o">=</span> <span class="s">"Python爬虫"</span>
-<span class="n">keyword_code</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+<span class="n">keyword_code</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">quote</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
 <span class="n">url</span> <span class="o">+=</span> <span class="n">keyword_code</span>
 </code></pre></div></div>
 
@@ -181,15 +181,15 @@
 <p>此处用 http://www.iqianyue.com/mypost/ 作为例子，构建表单部分如下：</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.iqianyue.com/mypost/"</span>
-<span class="n">postdata</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span>
+<span class="n">postdata</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">parse</span><span class="p">.</span><span class="n">urlencode</span><span class="p">(</span>
 <span class="p">{</span>
     <span class="s">"name"</span><span class="p">:</span><span class="s">"12345678@163.com"</span><span class="p">,</span>
     <span class="s">"password"</span><span class="p">:</span><span class="s">"Aa12345"</span>
-<span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="c1">#将数据处理后设置为utf-8编码
-</span><span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">postdata</span><span class="p">)</span>
+<span class="p">}).</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="c1">#将数据处理后设置为utf-8编码
+</span><span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">postdata</span><span class="p">)</span>
 <span class="c1">#或
 </span><span class="n">postdata</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">postdata</span><span class="p">)</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">postdata</span><span class="p">)</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">postdata</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>完整代码如下：</p>
@@ -197,21 +197,21 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">urllib.parse</span>
 <span class="kn">import</span> <span class="nn">urllib.request</span>
 <span class="n">url</span> <span class="o">=</span> <span class="s">"http://www.iqianyue.com/mypost/"</span>
-<span class="n">postdata</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span>
+<span class="n">postdata</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">parse</span><span class="p">.</span><span class="n">urlencode</span><span class="p">(</span>
 <span class="p">{</span>
     <span class="s">"name"</span><span class="p">:</span><span class="s">"123456@163.com"</span><span class="p">,</span>
     <span class="s">"password"</span><span class="p">:</span><span class="s">"Aa12345"</span>
-<span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">postdata</span><span class="p">)</span>
-<span class="n">request</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0'</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="p">}).</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">postdata</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="n">add_header</span><span class="p">(</span><span class="s">'User-Agent'</span><span class="p">,</span> <span class="s">'Mozilla/5.0'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
 <span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"D:/3.html"</span><span class="p">,</span><span class="s">'wb'</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h3 id="9设置代理服务器">9.设置代理服务器</h3>
-<p>a.使用  <code class="highlighter-rouge">urllib.request.ProxyHandler({'http':Proxy_addr})</code>
+<p>a.使用  <code class="language-plaintext highlighter-rouge">urllib.request.ProxyHandler({'http':Proxy_addr})</code>
 设置代理服务器信息，其中Proxy_addr为“网址：端口号”；</p>
 
 <p>b.创建一个opener对象，以代理服务器信息和urllib.request.HTTPHandler为参数 ；</p>
@@ -224,10 +224,10 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">urllib.request</span>
  
-<span class="n">proxy</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s">'http'</span><span class="p">:</span><span class="s">'116.55.77.81:61201'</span><span class="p">})</span>  <span class="c1">#a
-</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPHandler</span><span class="p">)</span>  <span class="c1">#b
-</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span> <span class="n">opener</span><span class="p">)</span>  <span class="c1">#c
-</span><span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>  <span class="c1">#d
+<span class="n">proxy</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">ProxyHandler</span><span class="p">({</span><span class="s">'http'</span><span class="p">:</span><span class="s">'116.55.77.81:61201'</span><span class="p">})</span>  <span class="c1">#a
+</span><span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">HTTPHandler</span><span class="p">)</span>  <span class="c1">#b
+</span><span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">install_opener</span><span class="p">(</span> <span class="n">opener</span><span class="p">)</span>  <span class="c1">#c
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>  <span class="c1">#d
 </span></code></pre></div></div>
 
 <h3 id="10urlerror">10.URLError</h3>
@@ -239,10 +239,10 @@
 <span class="kn">import</span> <span class="nn">urllib.error</span>
  
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+    <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">code</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">reason</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>产生URLError的可能有：</p>
@@ -261,41 +261,41 @@
 <span class="kn">import</span> <span class="nn">urllib.error</span>
  
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> <span class="c1">#先用子类处理，若无法处理再使用父类处理
-</span>    <span class="k">print</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+    <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">code</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">reason</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">urllib</span><span class="p">.</span><span class="n">error</span><span class="p">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> <span class="c1">#先用子类处理，若无法处理再使用父类处理
+</span>    <span class="k">print</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">reason</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="11使用cookie">11.使用Cookie</h3>
 <p>获取Cookie</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">urllib.request</span><span class="p">,</span> <span class="n">http</span><span class="o">.</span><span class="n">cookiejar</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">urllib.request</span><span class="p">,</span> <span class="n">http</span><span class="p">.</span><span class="n">cookiejar</span>
 
-<span class="n">cookie</span> <span class="o">=</span> <span class="n">cookiejar</span><span class="o">.</span><span class="n">CookieJar</span><span class="p">()</span>
-<span class="n">handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
-<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">)</span>
+<span class="n">cookie</span> <span class="o">=</span> <span class="n">cookiejar</span><span class="p">.</span><span class="n">CookieJar</span><span class="p">()</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">opener</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>保存Cookie到本地</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">filename</span> <span class="o">=</span> <span class="s">'cookie.txt'</span>
-<span class="n">cookie</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">cookiejar</span><span class="o">.</span><span class="n">MozillaCookieJar</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1">#此处将CookieJar替换为MozillaCookieJar
-</span><span class="n">handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
-<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
-<span class="n">cookie</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ignore_discard</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ignore_expires</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">cookie</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">cookiejar</span><span class="p">.</span><span class="n">MozillaCookieJar</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1">#此处将CookieJar替换为MozillaCookieJar
+</span><span class="n">handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">opener</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"http://www.baidu.com"</span><span class="p">)</span>
+<span class="n">cookie</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">ignore_discard</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ignore_expires</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>读取本地Cookie</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cookie</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">cookiejar</span><span class="o">.</span><span class="n">MozillaCookieJar</span><span class="p">()</span>
-<span class="n">cookie</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">'cookie.txt'</span><span class="p">,</span> <span class="n">ignore_discard</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ignore_expires</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
-<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cookie</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">cookiejar</span><span class="p">.</span><span class="n">MozillaCookieJar</span><span class="p">()</span>
+<span class="n">cookie</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'cookie.txt'</span><span class="p">,</span> <span class="n">ignore_discard</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ignore_expires</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">opener</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">)</span>
 </code></pre></div></div>
 :ET

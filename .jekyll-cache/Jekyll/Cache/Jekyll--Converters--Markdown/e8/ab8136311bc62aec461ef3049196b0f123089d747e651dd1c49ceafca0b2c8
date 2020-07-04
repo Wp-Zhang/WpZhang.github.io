@@ -1,4 +1,4 @@
-I"E�<h2 id="pandas入门">pandas入门</h2>
+I"��<h2 id="pandas入门">pandas入门</h2>
 <h6 id="建议与jupyter-notebook配合阅读">建议与Jupyter Notebook配合阅读</h6>
 <hr />
 
@@ -9,25 +9,25 @@
 
 <h4 id="series--一维数据表">Series – 一维数据表</h4>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">])</span>
 <span class="n">obj</span>
 </code></pre></div></div>
 
 <p>左边第一列为index，默认为range(n)，可以自己设置</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
 <span class="n">obj</span>
 </code></pre></div></div>
 
 <p>通过.values获得值，.index获得索引</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span><span class="o">.</span><span class="n">values</span>
-<span class="n">obj</span><span class="o">.</span><span class="n">index</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span><span class="p">.</span><span class="n">values</span>
+<span class="n">obj</span><span class="p">.</span><span class="n">index</span>
 </code></pre></div></div>
 
 <p>可以通过标签对元素进行索引</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
 <span class="n">obj</span><span class="p">[</span><span class="s">'a'</span><span class="p">]</span>
 <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </code></pre></div></div>
@@ -35,33 +35,33 @@
 <p><strong>Series对象可以由字典生成</strong>，数组操作与Numpy中相似</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s">'b'</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">'c'</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
-<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
 <span class="n">obj</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 可以通过设置索引改变排列顺序
 </span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'a'</span><span class="p">]</span>
-<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
 <span class="n">obj</span>
 </code></pre></div></div>
 
 <p>使用isnull和notnull检查缺失数据</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s">'b'</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">'c'</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
-<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
 <span class="n">obj</span> 
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">notnull</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pd</span><span class="p">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="n">pd</span><span class="p">.</span><span class="n">notnull</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>为Series对象设置name属性</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s">'a'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s">'b'</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">'c'</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
-<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
-<span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Seties_obj 1"</span>  <span class="c1">#整个对象的name
-</span><span class="n">obj</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Letter"</span>  <span class="c1">#索引的name
+<span class="n">obj</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
+<span class="n">obj</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Seties_obj 1"</span>  <span class="c1">#整个对象的name
+</span><span class="n">obj</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Letter"</span>  <span class="c1">#索引的name
 </span><span class="n">obj</span>
 </code></pre></div></div>
 
@@ -74,7 +74,7 @@
     <span class="s">'Sex'</span><span class="p">:[</span><span class="s">'Female'</span><span class="p">,</span><span class="s">'Male'</span><span class="p">,</span><span class="s">'Female'</span><span class="p">,</span><span class="s">'Male'</span><span class="p">],</span>
     <span class="s">'Age'</span><span class="p">:[</span><span class="mi">23</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
       <span class="p">}</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
 <span class="n">df</span>
 </code></pre></div></div>
 
@@ -82,25 +82,25 @@
 
 <p>通过传递参数columns指定列顺序</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Sex'</span><span class="p">,</span><span class="s">'Name'</span><span class="p">,</span><span class="s">'Age'</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">'Name'</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Sex'</span><span class="p">,</span><span class="s">'Name'</span><span class="p">,</span><span class="s">'Age'</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">'Name'</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">)</span>
 <span class="n">df</span>
 </code></pre></div></div>
 
 <p>像字典那样检索Series</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'Name'</span><span class="p">]</span> <span class="c1">#通用
-</span><span class="n">df</span><span class="o">.</span><span class="n">Name</span>    <span class="c1">#列名应是有效的Python变量名
+</span><span class="n">df</span><span class="p">.</span><span class="n">Name</span>    <span class="c1">#列名应是有效的Python变量名
 </span></code></pre></div></div>
 
 <p>转置操作与NumPy类似</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">T</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">T</span>
 </code></pre></div></div>
 
 <p>获取index和values操作与Series相同</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">index</span>
-<span class="n">df</span><span class="o">.</span><span class="n">values</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">index</span>
+<span class="n">df</span><span class="p">.</span><span class="n">values</span>
 </code></pre></div></div>
 
 <p>pandas中的索引对象像数组也像<strong>固定大小</strong>的集合，所以有一些相关类似方法</p>
@@ -126,7 +126,7 @@
 
 <p>使用.reindex()方法</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
                     <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">],</span>
                     <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Chengdu'</span><span class="p">,</span> <span class="s">'Changsha'</span><span class="p">,</span> <span class="s">'Beijing'</span><span class="p">])</span>
 <span class="n">frame</span>
@@ -134,13 +134,13 @@
 
 <h5 id="修改索引">修改索引</h5>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame2</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">reindex</span><span class="p">([</span><span class="s">'c'</span><span class="p">,</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame2</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">reindex</span><span class="p">([</span><span class="s">'c'</span><span class="p">,</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">])</span>
 <span class="n">frame2</span>
 </code></pre></div></div>
 
 <h5 id="修改列名">修改列名</h5>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame3</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Chengdu'</span><span class="p">,</span><span class="s">'Changsha'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame3</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Chengdu'</span><span class="p">,</span><span class="s">'Changsha'</span><span class="p">])</span>
 <span class="n">frame3</span>
 </code></pre></div></div>
 
@@ -148,7 +148,7 @@
 
 <h4 id="删除条目">删除条目</h4>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
                     <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">],</span>
                     <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Chengdu'</span><span class="p">,</span> <span class="s">'Changsha'</span><span class="p">,</span> <span class="s">'Beijing'</span><span class="p">])</span>
 <span class="n">frame</span>
@@ -156,18 +156,18 @@
 
 <h5 id="删除行">删除行</h5>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Chengdu'</span><span class="p">,</span><span class="s">'Beijing'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Chengdu'</span><span class="p">,</span><span class="s">'Beijing'</span><span class="p">])</span>
 </code></pre></div></div>
 
 <h5 id="删除列--设置axis参数">删除列 – 设置axis参数</h5>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'b'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">frame</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'b'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s">"columns"</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'b'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">frame</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'b'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s">"columns"</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h5 id="直接修改原对象--设置inplace参数">直接修改原对象 – 设置inplace参数</h5>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'Beijing'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">frame</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'Beijing'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">frame</span>
 </code></pre></div></div>
 
@@ -177,7 +177,7 @@
 
 <h6 id="series">Series</h6>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">])</span>
 <span class="n">s</span>
 </code></pre></div></div>
 
@@ -190,7 +190,7 @@
 
 <h6 id="dataframe">DataFrame</h6>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)),</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)),</span>
                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Shanghai'</span><span class="p">,</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'Shenzhen'</span><span class="p">],</span>
                  <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'d'</span><span class="p">])</span>
 <span class="n">df</span>
@@ -209,23 +209,23 @@
   <li><strong>iloc</strong>为<strong><em>整数标签</em></strong>，即通过整数索引</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s">'Guangdong'</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'b'</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'Beijing'</span><span class="p">],[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'d'</span><span class="p">]]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s">'a'</span><span class="p">:</span><span class="s">'c'</span><span class="p">][</span><span class="n">df</span><span class="o">.</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">7</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="s">'Guangdong'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'b'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">.</span><span class="n">loc</span><span class="p">[[</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'Beijing'</span><span class="p">],[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'d'</span><span class="p">]]</span>
+<span class="n">df</span><span class="p">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s">'a'</span><span class="p">:</span><span class="s">'c'</span><span class="p">][</span><span class="n">df</span><span class="p">.</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">7</span><span class="p">]</span>
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">][</span><span class="n">df</span><span class="o">.</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">7</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
+<span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">][</span><span class="n">df</span><span class="p">.</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">7</span><span class="p">]</span>
 </code></pre></div></div>
 
 <h4 id="排序">排序</h4>
 
 <h5 id="对索引排序">对索引排序</h5>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)),</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)),</span>
                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'a'</span><span class="p">],</span>
                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Shanghai'</span><span class="p">,</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'Shenzhen'</span><span class="p">])</span>
 <span class="n">df</span>
@@ -233,27 +233,27 @@
 
 <p>对行排序</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">sort_index</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>对列排序</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 要降序排列时设置参数ascending
-</span><span class="n">df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</span><span class="n">df</span><span class="p">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>按值排序</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 当排序对象为DataFrame时要设置参数by以设定排序的标准
-</span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">"Shanghai"</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Shanghai'</span><span class="p">])</span> <span class="c1">#多行排序，优先级依照列表顺序
+</span><span class="n">df</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s">"Shanghai"</span><span class="p">)</span>
+<span class="n">df</span><span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Shanghai'</span><span class="p">])</span> <span class="c1">#多行排序，优先级依照列表顺序
 </span></code></pre></div></div>
 
 <h3 id="统计与计算">统计与计算</h3>
 
 <h4 id="基础操作">基础操作</h4>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)),</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)),</span>
                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'c'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'a'</span><span class="p">],</span>
                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">,</span><span class="s">'Shanghai'</span><span class="p">,</span><span class="s">'Guangdong'</span><span class="p">,</span><span class="s">'Shenzhen'</span><span class="p">])</span>
 <span class="n">df</span>
@@ -265,41 +265,41 @@
   <li>对列求和</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="nb">sum</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span>
 </code></pre></div></div>
 
 <ol>
   <li>对行求和</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h6 id="求平均值">求平均值</h6>
 
 <p>求平均值时将自动跳过为NaN的元素(如果有的话)，行、列选择与求和相同</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h6 id="求最值">求最值</h6>
 
 <p>将返回最值所在位置的索引</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">idxmin</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">idxmax</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">idxmin</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h6 id="积累性方法--cumsum与cumprod">积累性方法 – cumsum与cumprod</h6>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">cumprod</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">cumsum</span><span class="p">()</span>
+<span class="n">df</span><span class="p">.</span><span class="n">cumprod</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h6 id="描述方法">描述方法</h6>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">describe</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h4 id="相关性和协方差">相关性和协方差</h4>
@@ -310,16 +310,16 @@
   <li>协方差</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">]</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Shenzhen'</span><span class="p">])</span>
-<span class="n">df</span><span class="o">.</span><span class="n">Beijing</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Shenzhen</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">].</span><span class="n">cov</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Shenzhen'</span><span class="p">])</span>
+<span class="n">df</span><span class="p">.</span><span class="n">Beijing</span><span class="p">.</span><span class="n">cov</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">Shenzhen</span><span class="p">)</span>
 </code></pre></div></div>
 
 <ol>
   <li>相关性</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Shenzhen'</span><span class="p">])</span>
-<span class="n">df</span><span class="o">.</span><span class="n">Beijing</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Shenzhen</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">].</span><span class="n">corr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Shenzhen'</span><span class="p">])</span>
+<span class="n">df</span><span class="p">.</span><span class="n">Beijing</span><span class="p">.</span><span class="n">corr</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">Shenzhen</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h6 id="dataframe-1">DataFrame</h6>
@@ -328,7 +328,7 @@
   <li>协方差</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">.</span><span class="n">cov</span><span class="p">()</span>
 </code></pre></div></div>
 
 <ol>
@@ -336,10 +336,10 @@
 </ol>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 计算两两之间的相关性
-</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+</span><span class="n">df</span><span class="p">.</span><span class="n">corr</span><span class="p">()</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 计算与一行/列的相关性
-</span><span class="n">df</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">])</span>
+</span><span class="n">df</span><span class="p">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Beijing'</span><span class="p">])</span>
 </code></pre></div></div>
 :ET

@@ -1,9 +1,9 @@
-I"l2<h3 id="题目分析求解topkbig问题时-堆排序-和-快速排序-的使用场景">题目：分析求解topk(big)问题时 <em>堆排序</em> 和 <em>快速排序</em> 的使用场景</h3>
+I"2<h3 id="题目分析求解topkbig问题时-堆排序-和-快速排序-的使用场景">题目：分析求解topk(big)问题时 <em>堆排序</em> 和 <em>快速排序</em> 的使用场景</h3>
 <hr />
 <h4 id="快速排序求解">快速排序求解</h4>
 <p>       这种算法利用了快速排序的主要思想：每次调用快速排序的partition函数后将会得出一个数n的最终位置，比较n及其右边所有数的总个数与目标个数k</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>若大于k，则对数n右边的数构成的数组调用partition函数；
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>若大于k，则对数n右边的数构成的数组调用partition函数；
 若等于k，则说明n及其右边的数就是我们想要得到的那k个数，排序结束；
 若小于k，这说明最终的k个数中还包含了n左边的数，对n左边的数构成的数组调用partition函数。
 </code></pre></div></div>
@@ -16,7 +16,7 @@
         <span class="k">return</span> <span class="n">A</span>
     <span class="n">pivot</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">A</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]]</span>
-    <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pivot</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pivot</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">rlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
@@ -27,9 +27,9 @@
         <span class="k">return</span> <span class="n">qselect</span><span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">left</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">A</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">pivot</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qselect</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="n">rlen</span><span class="p">),</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">qselect</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="n">rlen</span><span class="p">),</span> <span class="n">right</span><span class="p">)</span>
 
-<span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">qselect</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 </code></pre></div></div>
@@ -73,7 +73,7 @@
         <span class="n">sift</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">heap</span>
 
-<span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">top_k</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 </code></pre></div></div>

@@ -1,4 +1,4 @@
-I"�<h3 id="题目找出一个集合的所有子集">题目：找出一个集合的所有子集</h3>
+I"�<h3 id="题目找出一个集合的所有子集">题目：找出一个集合的所有子集</h3>
 <hr />
 <h4 id="方法一">方法一</h4>
 <p>        仿照人工寻找子集的方式：设集合为 <strong>[a, b, c, d]</strong> 则寻找顺序为：</p>
@@ -18,10 +18,10 @@
             <span class="n">tmpSet2</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
                 <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
-                    <span class="n">tmpSet2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">element</span><span class="p">)</span>
+                    <span class="n">tmpSet2</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">element</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">tmpSet2</span><span class="p">:</span>
-                <span class="n">tmpSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpSet2</span><span class="p">)</span>
-        <span class="nb">set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpSet</span><span class="p">)</span>
+                <span class="n">tmpSet</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpSet2</span><span class="p">)</span>
+        <span class="nb">set</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpSet</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">set</span>
 </code></pre></div></div>
 
@@ -29,7 +29,7 @@
 <p>        采用如下的寻找子集的方式：</p>
 
 <ol>
-  <li>初始化空嵌套列表 <code class="highlighter-rouge">[[]]</code></li>
+  <li>初始化空嵌套列表 <code class="language-plaintext highlighter-rouge">[[]]</code></li>
   <li>遍历集合，将当前元素与当前子集列表中每一个元素分别相加，将产生的新子集列表添加至就的子集列表中</li>
 </ol>
 
@@ -46,7 +46,7 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">getSubset2</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[[]]</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">subset</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">extend</span><span class="p">([</span><span class="n">subset</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">result</span>
 </code></pre></div></div>
 <p>        <strong>显然这个算法较第一种简洁很多且速度快了很多</strong></p>
@@ -63,7 +63,7 @@
         <span class="n">combo</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
             <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span> <span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">combo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">combo</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
         <span class="k">yield</span> <span class="n">combo</span>
 </code></pre></div></div>
 <p>        前几种方法当集合长度为20+时速度就明显下降，25+以后要等很长时间，但是这个算法…</p>

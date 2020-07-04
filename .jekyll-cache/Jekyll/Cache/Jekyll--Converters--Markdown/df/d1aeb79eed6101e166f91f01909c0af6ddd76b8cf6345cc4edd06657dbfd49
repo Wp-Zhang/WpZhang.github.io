@@ -1,10 +1,10 @@
-I"�<h3 id="views">Views</h3>
+I"V<h3 id="views">Views</h3>
 <p>不同的request请求由不同的views.py中的函数响应</p>
 
 <p>格式如下：</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="err">名称(</span><span class="nf">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="err">调用的</span><span class="n">html</span><span class="err">静态文件</span><span class="p">,</span> <span class="p">{</span><span class="err">传入</span><span class="n">html</span><span class="err">文件的参数</span><span class="p">})</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">名称</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">调用的html静态文件</span><span class="p">,</span> <span class="p">{</span><span class="n">传入html文件的参数</span><span class="p">})</span>
 </code></pre></div></div>
 <p>编写完成后如下：</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
@@ -24,7 +24,7 @@
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
     
     <span class="c1">#这里将主界面与index/views.py 中的index函数关联
-</span>    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"MainPage"</span><span class="p">),</span>
+</span>    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"MainPage"</span><span class="p">),</span>
 <span class="p">]</span>
 </code></pre></div></div>
 
@@ -39,7 +39,7 @@
 </code></pre></div></div>
 <p>这里设置如下：</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span>
     <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s">'index.urls'</span><span class="p">)),</span>
 <span class="p">]</span>
 </code></pre></div></div>
